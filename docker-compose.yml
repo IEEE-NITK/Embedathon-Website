@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:8.0.28
+    ports:
+      - '3306:3306'
+    environment:
+       MYSQL_DATABASE: '${DATABASE_NAME}'
+       MYSQL_USER: '${DATABASE_USER}'
+       MYSQL_PASSWORD: '${DATABASE_PASS}'
+       MYSQL_ROOT_PASSWORD: '${DATABASE_PASS}'
+  web:
+    build: .
+    # Wait for db to be ready, uses https://github.com/eficode/wait-for
+    entrypoint: ["./bin/wait-for", "db:3306", "--", "python", "manage.py", "runserver", "0.0.0.0:8000"]
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      - PROJECT_SECRET=${PROJECT_SECRET}
+      - DATABASE_NAME=${DATABASE_NAME}
+      - DATABASE_USER=${DATABASE_USER}
+      - DATABASE_PASS=${DATABASE_PASS}
+      - DATABASE_HOST=${DATABASE_HOST}
+      - DATABASE_PORT=${DATABASE_PORT}
