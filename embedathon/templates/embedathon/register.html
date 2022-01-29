@@ -1,0 +1,71 @@
+{% extends 'embedathon/layout.html' %}
+{% load static %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Register</h5>
+
+        <!-- Floating Labels Form -->
+        <form action="{% url 'register' %}" method="post" class="row g-3 needs-validation" onSubmit="return checkPassword(this)" novalidate>
+            {% csrf_token %}
+            <div class="col-md-6">
+                <div class="form-floating has-validation">
+                    <input type="text" class="form-control" id="first_name" name="first_name" placeholder="First Name" required>
+                    <label for="first_name">First Name</label>
+                </div>
+
+            </div>
+            <div class="col-md-6">
+                <div class="form-floating has-validation">
+                    <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Last Name" required>
+                    <label for="last_name">Last Name</label>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-floating has-validation">
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Email Address" required>
+                    <label for="email">Email Address</label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-floating has-validation">
+                    <input type="text" class="form-control" id="username" name="username" placeholder="Username" required>
+                    <label for="username">Username</label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-floating has-validation">
+                    <input type="text" class="form-control" id="phone" name="phone" placeholder="Phone Number" required>
+                    <label for="phone">Phone Number</label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-floating has-validation">
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+                    <label for="password">Password</label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-floating has-validation">
+                    <input type="password" class="form-control" id="confirmation" name="confirmation" placeholder="Confirm Password" required>
+                    <label for="confirmation">Confirm Password</label>
+                    <div class="invalid-feedback">
+                        Passwords don't match!
+                    </div>
+                </div>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </form><!-- End floating Labels Form -->
+
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'embedathon/js/register.js' %}"></script>
+{% endblock %}
