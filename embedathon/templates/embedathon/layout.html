@@ -41,10 +41,12 @@
   ======================================================== -->
 </head>
 
-<body>
+<body class="toggle-sidebar">
   {% include 'embedathon/header.html' %}
 
-  {% include 'embedathon/sidebar.html' %}
+  {% if user.is_authenticated %}
+    {% include 'embedathon/sidebar.html' %}
+  {% endif %}
 
   <!-- ======= Content ======= -->
   <main class="main" id="main">
