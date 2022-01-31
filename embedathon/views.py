@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.db import IntegrityError
 from django.contrib.auth import login, logout, authenticate
 from django.urls import reverse
+from django.contrib.auth.decorators import login_required
 
 from .models import *
 
@@ -37,7 +38,7 @@ def register_user(request):
             }, status=400)
 
         login(request, user)
-        return HttpResponseRedirect(reverse('index'))
+        return HttpResponseRedirect(reverse('homepage'))
 
     return render(request, 'embedathon/register.html')
 
@@ -50,7 +51,7 @@ def login_user(request):
 
         if user is not None:
             login(request, user)
-            return HttpResponseRedirect(reverse('index'))
+            return HttpResponseRedirect(reverse('homepage'))
         else:
             return render(request, 'embedathon/login.html', {
                 "error": "Invalid username or password."
@@ -61,3 +62,7 @@ def login_user(request):
 def logout_user(request):
     logout(request)
     return HttpResponseRedirect(reverse('index'))
+
+@login_required
+def team_home(request):
+    return render(request, 'embedathon/homepage.html')

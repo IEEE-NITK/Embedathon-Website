@@ -3,12 +3,18 @@
  <header id="header" class="header fixed-top d-flex align-items-center">
 
     <div class="d-flex align-items-center justify-content-between">
+      {% if user.is_authenticated %}
+      <a href="{% url 'homepage' %}" class="logo d-flex align-items-center">
+      {% else %}
       <a href="{% url 'index' %}" class="logo d-flex align-items-center">
+      {% endif %}
         <!-- TODO: Update with Embedathon Logo -->
         <img src="{% static 'img/logo.png' %}" alt="Embedathon Logo">
         <span class="d-none d-lg-block">Embedathon</span>
       </a>
+      {% if user.is_authenticated %}
       <i class="bi bi-list toggle-sidebar-btn"></i>
+      {% endif %}
     </div><!-- End Logo -->
 
     <!-- <div class="search-bar">
