@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.db import IntegrityError
-from django.contrib.auth import login
+from django.contrib.auth import login, logout, authenticate
 from django.urls import reverse
 
 from .models import *
@@ -40,3 +40,24 @@ def register_user(request):
         return HttpResponseRedirect(reverse('index'))
 
     return render(request, 'embedathon/register.html')
+
+def login_user(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return HttpResponseRedirect(reverse('index'))
+        else:
+            return render(request, 'embedathon/login.html', {
+                "error": "Invalid username or password."
+            })
+
+    return render(request, 'embedathon/login.html')
+
+def logout_user(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('index'))
