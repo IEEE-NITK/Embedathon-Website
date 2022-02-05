@@ -20,7 +20,7 @@ class Team(models.Model):
 
     disqualified = models.BooleanField(default=False, verbose_name="Disqualified")
     points = models.IntegerField(default=0, verbose_name="Points")
-    max_task_visible = models.ForeignKey('Task', on_delete=models.CASCADE, default=1)
+    max_task_visible = models.ForeignKey('Task', on_delete=models.CASCADE, null=True)
 
     date_created = models.DateTimeField(auto_now_add=True, verbose_name="Date Created")
 
