@@ -48,11 +48,13 @@
     {% include 'embedathon/sidebar.html' %}
   {% endif %}
 
+  {% block body_nomain %}
   <!-- ======= Content ======= -->
   <main class="main" id="main">
     {% block body %}
     {% endblock %}
   </main>
+  {% endblock %}
 
   {% include 'embedathon/footer.html' %}
 
