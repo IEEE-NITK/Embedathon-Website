@@ -1,14 +1,17 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.db import IntegrityError
+from django.db.models import Q
 from django.contrib.auth import login, logout, authenticate
 from django.urls import reverse
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.admin.views.decorators import staff_member_required
 
 import string
 import random
 
 from .models import *
+from .helpers import team_check
 
 # Create your views here.
 def index(request):
@@ -67,8 +70,15 @@ def logout_user(request):
     return HttpResponseRedirect(reverse('index'))
 
 @login_required
+@user_passes_test(team_check, login_url='/register-team/')
 def team_home(request):
-    return render(request, 'embedathon/homepage.html')
+    user = request.user
+
+    team = Team.objects.get(Q(leader=user) | Q(member=user))
+    return render(request, 'embedathon/homepage.html', {
+        "team": team
+    })
+
 
 @login_required
 def register_team(request):
@@ -118,3 +128,32 @@ def join_team(request):
         return HttpResponseRedirect(reverse('homepage'))
 
     return HttpResponseRedirect(reverse('homepage'))
+
+@staff_member_required
+def update_max_task(request):
+    tasks = Task.objects.all()
+    if request.method == "POST":
+        try:
+            task = Task.objects.get(pk=request.POST['task-id'])
+            teams = Team.objects.all()
+
+            for team in teams:
+                if not team.disqualified:
+                    team.max_task_visible = task
+                    team.save()
+
+            return render(request, 'embedathon/update-max-task.html', {
+                'tasks': tasks,
+                'message': 'Successfully updated max task!'
+                })
+        except:
+            render(request, 'embedathon/update-max-task.html', {
+                'tasks': tasks,
+                'error': 'Invalid task id!'
+                })
+
+
+
+    return render(request, 'embedathon/update-max-task.html', {
+        "tasks": tasks
+        })

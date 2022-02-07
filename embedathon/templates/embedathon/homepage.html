@@ -1,7 +1,42 @@
 {% extends 'embedathon/layout.html' %}
+{% load static %}
 
 {% block title %}Home | Embedathon{% endblock %}
 
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/copy-text.css' %}">
+{% endblock %}
+
+
 {% block body %}
-Hello world!
+{% if team.max_task_visible is None %}
+<div class="container">
+    <section class="section min-vh-100 d-flex flex-column align-items-center justify-content-center py-2">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div
+                    class="text-center col-log-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
+                    {% if team.member is not None %}
+                    <h1>You're all set, {{ user.first_name }}!</h1>
+                    <h4>You're on Team <strong>{{ team.teamname }}</strong></h4>
+                    {% else %}
+                    <h1><a href="" class="copy-click" data-tooltip-text="Click To Copy"
+                            data-tooltip-text-copied="✔ Copied">{{ team.passcode }}</a>
+                    </h1>
+                    <h4>Team Passcode for Team <strong>{{ team.teamname }}</strong></h4>
+                    <p class="small">Share this passcode ONLY with your second teammate (if participating as a team of
+                        2)</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% else %}
+    <h1>Hackathon has begun!</h1>
+{% endif %}
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'js/copy-text.js' %}"></script>
 {% endblock %}

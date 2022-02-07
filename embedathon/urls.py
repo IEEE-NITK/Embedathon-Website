@@ -10,4 +10,6 @@ urlpatterns = [
     path('home/', views.team_home, name="homepage"),
     path('register-team/', views.register_team, name="register-team"),
     path('join-team/', views.join_team, name="join-team"),
+
+    path('update-max-task/', views.update_max_task, name="update-max-task"),
 ]
