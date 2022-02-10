@@ -1,21 +1,27 @@
 {% extends 'embedathon/layout.html' %}
 {% load static %}
 
+{% block style %}
+<link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+<link href="{% static 'css/index.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block index_only %}{% endblock %}
 {% block body_nomain %}
-<div class="container">
+<div class="container-fluid">
   <!-- Landing Section -->
-  <section class="row justify-content-center text-center min-vh-100 align-items-center" id="landing">
-    <img src="{% static 'img/embedathon-logo.png' %}" class="col-md-6 pt-5" alt="Emebdathon Logo">
-    <div class="col-12 pb-5">
+  <section class="row justify-content-center text-center min-vh-100 align-items-center" id="landing" style="background-image: url({% static 'img/landing-bg.jpg' %});">
+    <img src="{% static 'img/embedathon-logo-light.png' %}" class="col-md-6 col-sm-6 pt-5 px-5" alt="Emebdathon Logo">
+    <div class="col-md-7 pb-5 landing-text">
       <h2 class="my-3">24-Hour Embedded System Hackathon</h2>
       <h6 class="my-3">National Institute of Technology Karnataka</h6>
-      <h4 class="text-primary">20th Feb - 13th March 2022</h4>
-      <a class="btn btn-primary col-md-2" href="{% url 'register' %}">Register Now</a>
+      <h4 class="my-3">20th Feb - 13th March 2022</h4>
+      <a class="btn col-md-2 mx-4" href="{% url 'register' %}">Register Now!</a>
+      <a class="btn col-md-2 mx-4" href="{% url 'login' %}">Login</a>
     </div>
   </section>
-  <hr>
   <!-- About Section -->
-  <section class="row justify-content-center text-center my-5" id="about">
+  <section class="animate-box row justify-content-center text-center my-5" id="about">
     <div class="col-md-10">
       <h1>What is Embedathon?</h1>
       <p>
@@ -25,12 +31,12 @@
         In addition to the problem statement resources, workshops and talks will also be conducted prior to the
         final event to enhance your experience with us! The expert talk will be open to everyone, even if you did
         not qualify the preliminary round. <br>
-        <strong style="color: black;">Open to 1st and 2nd year students from all over India!</strong>
+        <strong>Open to 1st and 2nd year students from all over India!</strong>
       </p>
     </div>
   </section>
   <hr>
-  <section class="row justify-content-center text-center my-5" id="prizes">
+  <section class="animate-box row justify-content-center text-center my-5" id="prizes">
     <div class="row">
       <h1>Prizes</h1>
       <p><b>Exciting Prizes await you!</b></p>
@@ -56,7 +62,7 @@
     </div>
   </section>
   <hr>
-  <section class="row justify-content-center text-center my-5" id="schedule">
+  <section class="animate-box row justify-content-center text-center my-5" id="schedule">
     <div class="row">
       <h1 class="col-12">Schedule</h1>
     </div>
@@ -96,7 +102,7 @@
     </div>
   </section>
   <hr>
-  <section class="row justify-content-center my-5" id="faq">
+  <section class="animate-box row justify-content-center my-5" id="faq">
     <div class="row text-center">
       <h1 class="col-12 mb-4">Frequently Asked Questions</h1>
     </div>
@@ -240,25 +246,25 @@
     </div>
   </section>
   <hr>
-  <section class="row justify-content-center text-center my-5" id="schedule">
+  <section class="animate-box row justify-content-center text-center my-5" id="organizers">
     <div class="row">
       <h1 class="col-12">Organized By</h1>
     </div>
     <div class="row pt-5 align-items-center">
       <div class="col-md-6">
-        <a href="https://ieee.nitk.ac.in/"><img src="https://ieee.nitk.ac.in/assets/img/ieee_nitk.png"
-            alt="IEEE NITK Logo" style="max-width: 250px;" />
+        <a href="https://ieee.nitk.ac.in/"><img src="{% static 'img/ieee_nitk.png' %}"
+            alt="IEEE NITK Logo" />
         </a>
       </div>
       <div class="col-md-6 mx-auto">
-        <a href="https://signalprocessingsociety.org/"><img src="https://ieee.nitk.ac.in/assets/img/logos/cas.png"
-            alt="SPS Logo" style="max-width: 250px;" />
+        <a href="https://signalprocessingsociety.org/"><img src="{% static 'img/cas.png' %}"
+            alt="SPS Logo" />
         </a>
       </div>
     </div>
   </section>
   <hr>
-  <section class="row justify-content-center text-center mt-5 mb-2" id="contact">
+  <section class="animate-box row justify-content-center text-center mt-5 mb-2" id="contact">
     <div class="row">
       <h1 class="col-12">Contact Us</h1>
     </div>
@@ -268,7 +274,7 @@
       </p>
     </div>
 
-    <div class="row justify-content-center" style="font-size: 2em;">
+    <div class="row justify-content-center" id="icons-div">
       <div class="col-md-1">
         <a href="https://www.facebook.com/IEEENITK/" class="facebook"><i class="ri-facebook-circle-fill"></i></a>
       </div>
