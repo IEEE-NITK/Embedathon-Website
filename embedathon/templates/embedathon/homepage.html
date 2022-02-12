@@ -9,7 +9,7 @@
 
 
 {% block body %}
-{% if team.max_task_visible is None %}
+{% if not hackathon_start %}
 <div class="container">
     <section class="section min-vh-100 d-flex flex-column align-items-center justify-content-center py-2">
         <div class="container">

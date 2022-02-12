@@ -1,0 +1,28 @@
+{% extends 'embedathon/layout.html' %}
+
+{% block title %}Task {{ task.id }} | Embedathon{% endblock %}
+
+{% block body %}
+<section class="section">
+    <div class="row justify-content-center">
+        <div class="col-10">
+            <div class="card">
+                <div class="card-header">
+                    Due by <strong>{{ task.deadline | date:"l, jS F, g:i A" }}</strong>
+                </div>
+                <div class="card-body text-center">
+                    <h1 class="card-title">{{ task.id }} - {{ task.title }}</h1>
+                    {{ task.description }}
+                </div>
+                <div class="card-footer text-center">
+                    <strong class="text-success">{{ task.points }} Points</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+    <h2 class="text-center mt-5 mb-3">Submission Form</h2>
+    <div class="d-flex justify-content-center">
+        <iframe src="{{ task.submission_link }}" width="640" height="500" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+    </div>
+</section>
+{% endblock %}

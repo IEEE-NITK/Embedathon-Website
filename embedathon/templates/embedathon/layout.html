@@ -44,7 +44,7 @@
 <body class="toggle-sidebar">
   {% include 'embedathon/header.html' %}
 
-  {% if user.is_authenticated %}
+  {% if user.is_authenticated and user_in_team %}
     {% include 'embedathon/sidebar.html' %}
   {% endif %}
 

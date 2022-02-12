@@ -29,7 +29,7 @@ SECRET_KEY = env('PROJECT_SECRET')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 AUTH_USER_MODEL = 'embedathon.User'
 
@@ -68,6 +68,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'embedathon.context_processors.general'
             ],
         },
     },
@@ -132,3 +133,6 @@ STATIC_URL = 'https://ieee.nitk.ac.in/embedathon-static-assets/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# IMPORTANT: Set this value to True when the Hackathon starts
+HACKATHON_START = True
