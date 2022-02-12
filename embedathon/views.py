@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.db import IntegrityError
 from django.db.models import Q
 from django.urls import reverse
+from django.conf import settings
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.admin.views.decorators import staff_member_required
@@ -24,6 +25,8 @@ def register_user(request):
     '''
     View to register a single user. Accepts GET and POST requests.
     '''
+    if request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('homepage'))
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -61,6 +64,8 @@ def login_user(request):
     '''
     Login Page view. Accepts GET and POST requests.
     '''
+    if request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('homepage'))
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -102,6 +107,11 @@ def team_home(request):
     if team.max_task_visible is not None:
         tasks = Task.objects.filter(id__lte=team.max_task_visible.id).order_by('id')
 
+    if settings.HACKATHON_START:
+        return render(request, 'embedathon/dashboard.html', {
+            "team": team,
+            "tasks": tasks
+        })
     return render(request, 'embedathon/homepage.html', {
         "team": team,
         "tasks": tasks

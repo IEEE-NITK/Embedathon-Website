@@ -9,7 +9,6 @@
 
 
 {% block body %}
-{% if not hackathon_start %}
 <div class="container">
     <section class="section min-vh-100 d-flex flex-column align-items-center justify-content-center py-2">
         <div class="container">
@@ -32,9 +31,6 @@
         </div>
     </section>
 </div>
-{% else %}
-    <h1>Hackathon has begun!</h1>
-{% endif %}
 {% endblock %}
 
 {% block script %}
