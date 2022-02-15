@@ -108,9 +108,17 @@ def team_home(request):
         tasks = Task.objects.filter(id__lte=team.max_task_visible.id).order_by('id')
 
     if settings.HACKATHON_START:
+        currentTask = team.max_task_visible
+        totalPoints = 0
+        for task in tasks:
+            totalPoints += task.points
+
+        percentPoints = int((team.points / totalPoints) * 100)
         return render(request, 'embedathon/dashboard.html', {
             "team": team,
-            "tasks": tasks
+            "tasks": tasks,
+            "task": currentTask,
+            "percent_points": percentPoints
         })
     return render(request, 'embedathon/homepage.html', {
         "team": team,
@@ -217,6 +225,9 @@ def leave_team(request):
     View for user to join a new team. Accepts GET and POST requests.
     User must be logged in and be a member of a team.
     '''
+    # Not allowed to change teams once hackathon is started
+    if settings.HACKATHON_START:
+        return HttpResponseRedirect(reverse('homepage'))
     user = request.user
     team = Team.objects.get(Q(leader=user) | Q(member=user))
 

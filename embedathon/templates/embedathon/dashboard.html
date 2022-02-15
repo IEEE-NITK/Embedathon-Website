@@ -1,7 +1,96 @@
 {% extends 'embedathon/layout.html' %}
+{% load humanize %}
 
 {% block title %}Home | Embedathon{% endblock %}
 
+{% block style %}
+<style>
+    .score {
+        position: relative;
+        height: inherit;
+        width: inherit;
+    }
+
+    .progress-circle {
+        transform: rotate(-90deg);
+    }
+
+    .progress-circle-back {
+        fill: none;
+        stroke: #D2D2D2;
+        stroke-width: 10px;
+    }
+
+    .progress-circle-prog {
+        fill: none;
+        stroke: #0066A1;
+        stroke-width: 10px;
+        stroke-dasharray: 0 999;
+        stroke-dashoffset: 0px;
+        transition: stroke-dasharray 0.7s linear 0s;
+    }
+
+    .progress-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        font-size: 2em;
+    }
+
+</style>
+{% endblock%}
+
 {% block body %}
-<h2>Hackathon has begun!</h2>
+<div class="container">
+    <div class="row my-3 align-items-stretch">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Current Task</h5>
+                    <div class="card-text"><strong>{{ task.title }}</strong>, due {{ task.deadline | naturaltime }}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body text-center justify-content-center">
+                    <h5 class="card-title">Team Score</h5>
+                    <div class="score">
+                        <svg class="progress-circle" width="200px" height="200px" xmlns="http://www.w3.org/2000/svg">
+                            <circle class="progress-circle-back" cx="100" cy="100" r="74"></circle>
+                            <circle class="progress-circle-prog" cx="100" cy="100" r="74"></circle>
+                        </svg>
+                        <div class="progress-text" data-progress="{{ percent_points }}">{{ team.points }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+    fillCircle = function () {
+        var value = $('.progress-text').data('progress');
+        document.querySelector('.progress-circle-prog').style.strokeDasharray = (value * 4.65) + ' 999';
+        var el = document.querySelector('.progress-text');
+        var from = 0;
+        var start = new Date().getTime();
+
+        setTimeout(function () {
+            var now = (new Date().getTime()) - start;
+            var progress = now / 700;
+            result = Math.floor((value - from) * progress + from);
+            el.innerHTML = progress < 1 ? result + '%' : value + '%';
+            if (progress < 1) setTimeout(arguments.callee, 10);
+        }, 10);
+    }
+
+    setTimeout(fillCircle, 200);
+</script>
 {% endblock %}
