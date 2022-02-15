@@ -39,7 +39,7 @@ def register_user(request):
         if password != request.POST["confirmation"]:
             return render(request, "embedathon/register.html", {
                 "error": "Passwords must match."
-            })
+            }, status=400)
 
         # Try to create a user with the given credentials
         try:
@@ -78,7 +78,7 @@ def login_user(request):
         else:
             return render(request, 'embedathon/login.html', {
                 "error": "Invalid username or password."
-            })
+            }, status=400)
 
     return render(request, 'embedathon/login.html')
 
@@ -109,16 +109,24 @@ def team_home(request):
 
     if settings.HACKATHON_START:
         currentTask = team.max_task_visible
+        leaderboard = Team.objects.order_by('-points')
         totalPoints = 0
+        submissions = {}
         for task in tasks:
             totalPoints += task.points
-
+            try:
+                submissions[task] = Score.objects.get(team=team, task=task)
+            except:
+                submissions[task] = None
         percentPoints = int((team.points / totalPoints) * 100)
+
         return render(request, 'embedathon/dashboard.html', {
             "team": team,
             "tasks": tasks,
             "task": currentTask,
-            "percent_points": percentPoints
+            "percent_points": percentPoints,
+            "submissions" : submissions,
+            "leaderboard": leaderboard
         })
     return render(request, 'embedathon/homepage.html', {
         "team": team,
@@ -240,13 +248,13 @@ def leave_team(request):
             return render(request, 'embedathon/leave-team.html', {
                 "team": team,
                 "error": "Invalid passcode!"
-                })
+                }, status=400)
         # Check if team is empty
         if newTeam.member != None:
             return render(request, 'embedathon/leave-team.html', {
                 "team": team,
                 "error": "Team is full!"
-                })
+                }, status=400)
         # If user is second teammate, just remove them
         if user == team.member:
             team.member = None
@@ -294,7 +302,7 @@ def update_max_task(request):
             render(request, 'embedathon/update-max-task.html', {
                 'tasks': tasks,
                 'error': 'Invalid task id!'
-                })
+                }, status=400)
 
     return render(request, 'embedathon/update-max-task.html', {
         "tasks": tasks

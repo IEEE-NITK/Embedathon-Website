@@ -1,4 +1,5 @@
 {% extends 'embedathon/layout.html' %}
+{% load humanize %}
 
 {% block title %}Task {{ task.id }} | Embedathon{% endblock %}
 
@@ -8,7 +9,7 @@
         <div class="col-10">
             <div class="card">
                 <div class="card-header">
-                    Due by <strong>{{ task.deadline | date:"l, jS F, g:i A" }}</strong>
+                    Due by <strong>{{ task.deadline | date:"l, jS F, g:i A" }}</strong>, {{ task.deadline | naturaltime }}
                 </div>
                 <div class="card-body text-center">
                     <h1 class="card-title">{{ task.id }} - {{ task.title }}</h1>
