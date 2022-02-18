@@ -3,30 +3,52 @@
 {% block title %}Login | Embedathon{% endblock %}
 
 {% block body %}
-<div class="card">
-    <div class="card-body">
-        <h5 class="card-title">Login</h5>
+<div class="container">
+    <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
+        <div class="container row justify-content-center col-lg-4 col-md-6 d-flex flex-column align-items-center">
+            <div class="card mb-3">
 
-        <!-- Floating Labels Form -->
-        <form action="{% url 'login' %}" method="post" class="row g-3 needs-validation" novalidate>
-            {% csrf_token %}
-            <div class="col-md-6">
-                <div class="form-floating has-validation">
-                    <input type="text" class="form-control" id="username" name="username" placeholder="Username" required>
-                    <label for="username">Username</label>
+                <div class="card-body">
+                    {% if error %}
+                    <div class="alert alert-danger alert-dismissible fade show mt-3 mb-0" role="alert">
+                        {{ error }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endif %}
+
+                    <div class="py-2">
+                        <h5 class="card-title text-center pb-0 fs-4">Login to Your Account</h5>
+                        <p class="text-center small">Enter your username & password to login</p>
+                    </div>
+
+                    <form action="{% url 'login' %}" method="post" class="row g-3 needs-validation" novalidate>
+                        {% csrf_token %}
+                        <div class="col-12">
+                            <label for="yourUsername" class="form-label">Username</label>
+                            <div class="input-group has-validation">
+                                <span class="input-group-text" id="inputGroupPrepend">@</span>
+                                <input type="text" name="username" class="form-control" id="yourUsername" required autofocus>
+                                <div class="invalid-feedback">Please enter your username.</div>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <label for="yourPassword" class="form-label">Password</label>
+                            <input type="password" name="password" class="form-control" id="yourPassword" required>
+                            <div class="invalid-feedback">Please enter your password!</div>
+                        </div>
+
+                        <div class="col-12">
+                            <button class="btn btn-primary w-100" type="submit">Login</button>
+                        </div>
+                        <div class="col-12">
+                            <p class="small mb-0">Don't have account? <a href="{% url 'register' %}">Register Here</a></p>
+                        </div>
+                    </form>
+
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="form-floating has-validation">
-                    <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
-                    <label for="password">Password</label>
-                </div>
-            </div>
-            <div class="text-center">
-                <button type="submit" class="btn btn-primary">Login</button>
-            </div>
-        </form><!-- End floating Labels Form -->
-
-    </div>
+        </div>
+    </section>
 </div>
 {% endblock %}

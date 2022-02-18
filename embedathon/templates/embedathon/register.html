@@ -6,33 +6,44 @@
 {% block body %}
 <div class="card">
     <div class="card-body">
+        {% if error %}
+        <div class="alert alert-danger alert-dismissible fade show mt-3 mb-0" role="alert">
+            {{ error }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
         <h5 class="card-title">Register</h5>
 
         <!-- Floating Labels Form -->
-        <form action="{% url 'register' %}" method="post" class="row g-3 needs-validation" onSubmit="return checkPassword(this)" novalidate>
+        <form action="{% url 'register' %}" method="post" class="row g-3 needs-validation"
+            onSubmit="return checkPassword(this)" novalidate>
             {% csrf_token %}
             <div class="col-md-6">
                 <div class="form-floating has-validation">
-                    <input type="text" class="form-control" id="first_name" name="first_name" placeholder="First Name" required>
+                    <input type="text" class="form-control" id="first_name" name="first_name" placeholder="First Name"
+                        required>
                     <label for="first_name">First Name</label>
                 </div>
 
             </div>
             <div class="col-md-6">
                 <div class="form-floating has-validation">
-                    <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Last Name" required>
+                    <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Last Name"
+                        required>
                     <label for="last_name">Last Name</label>
                 </div>
             </div>
             <div class="col-md-12">
                 <div class="form-floating has-validation">
-                    <input type="email" class="form-control" id="email" name="email" placeholder="Email Address" required>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Email Address"
+                        required>
                     <label for="email">Email Address</label>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-floating has-validation">
-                    <input type="text" class="form-control" id="username" name="username" placeholder="Username" required>
+                    <input type="text" class="form-control" id="username" name="username" placeholder="Username"
+                        required>
                     <label for="username">Username</label>
                 </div>
             </div>
@@ -44,13 +55,15 @@
             </div>
             <div class="col-md-6">
                 <div class="form-floating has-validation">
-                    <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Password"
+                        required>
                     <label for="password">Password</label>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-floating has-validation">
-                    <input type="password" class="form-control" id="confirmation" name="confirmation" placeholder="Confirm Password" required>
+                    <input type="password" class="form-control" id="confirmation" name="confirmation"
+                        placeholder="Confirm Password" required>
                     <label for="confirmation">Confirm Password</label>
                     <div class="invalid-feedback">
                         Passwords don't match!
@@ -58,14 +71,18 @@
                 </div>
             </div>
             <div class="text-center">
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-primary">Register</button>
             </div>
         </form><!-- End floating Labels Form -->
+        <div class="col-12 text-center">
+            <p class="small mt-2">Already have an account? <a href="{% url 'login' %}">Login here</a></p>
+        </div>
 
     </div>
+
 </div>
 {% endblock %}
 
 {% block script %}
-    <script src="{% static 'js/register.js' %}"></script>
+<script src="{% static 'js/register.js' %}"></script>
 {% endblock %}

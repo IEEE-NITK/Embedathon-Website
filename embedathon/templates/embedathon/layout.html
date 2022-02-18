@@ -8,13 +8,12 @@
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
   <title>{% block title %}Embedathon{% endblock %}</title>
-  <!-- TODO: Add Description and Keywords -->
-  <meta content="" name="description">
-  <meta content="" name="keywords">
 
-  <!-- TODO: Add Favicons -->
-  <!-- <link href="assets/img/favicon.png" rel="icon">
-  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon"> -->
+  <meta content="Embedathon is a 3-week long embedded systems task-based hackathon challenge hosted by IEEE NITK student branch in association with CAS Society. It presents you with interesting problem statements to ensure a fun-filled learning experience. This is the fourth edition of the event promising to be bigger and better." name="description">
+  <meta content="Embedathon, IEEE, IEEE NITK, NITK Surathkal, NITK, Clubs in NITK, Technical Clubs in NITK" name="keywords">
+
+  <link href="{% static 'img/favicon.ico' %}" rel="icon">
+  <link href="{% static 'img/apple-touch-icon.png' %}" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
   <link href="https://fonts.gstatic.com" rel="preconnect">
@@ -42,11 +41,15 @@
   ======================================================== -->
 </head>
 
+{% if user.is_authenticated %}
+<body>
+{% else %}
 <body class="toggle-sidebar">
+{% endif %}
   {% block index_only %}
   {% include 'embedathon/header.html' %}
 
-  {% if user.is_authenticated %}
+  {% if user.is_authenticated and user_in_team %}
     {% include 'embedathon/sidebar.html' %}
   {% endif %}
   {% endblock %}

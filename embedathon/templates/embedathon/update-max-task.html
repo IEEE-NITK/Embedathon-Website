@@ -1,0 +1,43 @@
+{% extends 'embedathon/layout.html' %}
+
+{% block title %}Update Tasks | Admin{% endblock %}
+
+{% block body %}
+<div class="container">
+    {% if message %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle me-1"></i>
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %}
+
+    {% if error %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-exclamation-octagon me-1"></i>
+        {{ error }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %}
+
+    <div class="row mb-3 text-center justify-content-center">
+        <div class="col-md-6">
+            <form action="{% url 'update-max-task' %}" method="post">
+                {% csrf_token %}
+                <div class="form-floating mb-3">
+                    <select name="task-id" class="form-select" id="floatingSelect" aria-label="Select Task ID">
+                        {% for task in tasks %}
+                        <option value="{{ task.id }}">{{ task.id }} - {{ task.title }}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="floatingSelect">Choose Max Visible Task</label>
+                </div>
+                <p class="small">This will update the Max Visible Task for all teams which are not disqualified</p>
+                <div class="col-12">
+                    <button class="btn btn-primary" type="submit">Update Tasks</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -13,14 +13,14 @@ class Team(models.Model):
     '''
     Stores Team info
     '''
-    teamname = models.CharField(max_length=30, verbose_name="Team Name")
-    passcode = models.CharField(max_length=6, verbose_name="Team Passcode")
+    teamname = models.CharField(max_length=30, verbose_name="Team Name", unique=True)
+    passcode = models.CharField(max_length=6, verbose_name="Team Passcode", unique=True)
     leader = models.OneToOneField('User', on_delete=models.CASCADE, related_name="team_leader")
-    member = models.OneToOneField('User', on_delete=models.CASCADE, blank=True, related_name="team_member")
+    member = models.OneToOneField('User', on_delete=models.CASCADE, blank=True, null=True, related_name="team_member")
 
     disqualified = models.BooleanField(default=False, verbose_name="Disqualified")
     points = models.IntegerField(default=0, verbose_name="Points")
-    max_task_visible = models.ForeignKey('Task', on_delete=models.CASCADE, default=1)
+    max_task_visible = models.ForeignKey('Task', on_delete=models.CASCADE, null=True)
 
     date_created = models.DateTimeField(auto_now_add=True, verbose_name="Date Created")
 
