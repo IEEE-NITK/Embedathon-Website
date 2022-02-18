@@ -41,7 +41,11 @@
   ======================================================== -->
 </head>
 
+{% if user.is_authenticated %}
 <body>
+{% else %}
+<body class="toggle-sidebar">
+{% endif %}
   {% block index_only %}
   {% include 'embedathon/header.html' %}
 

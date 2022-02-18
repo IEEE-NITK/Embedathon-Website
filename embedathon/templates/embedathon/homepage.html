@@ -14,7 +14,7 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div
-                    class="text-center col-log-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
+                    class="text-center col-md-8 d-flex flex-column align-items-center justify-content-center">
                     {% if team.member is not None %}
                     <h1>You're all set, {{ user.first_name }}!</h1>
                     <h4>You're on Team <strong>{{ team.teamname }}</strong></h4>
@@ -27,6 +27,11 @@
                         2)</p>
                     {% endif %}
                 </div>
+            </div>
+            <div class="row justify-content-center text-center">
+                <p>
+                    Join the <a href="https://discord.gg/WxA6AbUN" target="_blank">Discord Server</a> for all updates and announcements!
+                </p>
             </div>
         </div>
     </section>
