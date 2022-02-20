@@ -41,7 +41,7 @@
   ======================================================== -->
 </head>
 
-{% if user.is_authenticated %}
+{% if user.is_authenticated and user_in_team %}
 <body>
 {% else %}
 <body class="toggle-sidebar">

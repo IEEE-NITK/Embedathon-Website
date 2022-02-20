@@ -13,7 +13,7 @@ services:
   web:
     build: .
     # Wait for db to be ready, uses https://github.com/eficode/wait-for
-    entrypoint: ["./bin/wait-for", "db:3306", "--", "python", "manage.py", "runserver", "0.0.0.0:8000"]
+    entrypoint: ["./bin/wait-for", "db:3306", "--", "./bin/start"]
     volumes:
       - .:/app
     ports:

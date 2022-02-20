@@ -111,14 +111,16 @@ def team_home(request):
         currentTask = team.max_task_visible
         leaderboard = Team.objects.order_by('-points')
         totalPoints = 0
+        percentPoints = 0
         submissions = {}
-        for task in tasks:
-            totalPoints += task.points
-            try:
-                submissions[task] = Score.objects.get(team=team, task=task)
-            except:
-                submissions[task] = None
-        percentPoints = int((team.points / totalPoints) * 100)
+        if len(tasks) > 0:
+            for task in tasks:
+                totalPoints += task.points
+                try:
+                    submissions[task] = Score.objects.get(team=team, task=task)
+                except:
+                    submissions[task] = None
+            percentPoints = int((team.points / totalPoints) * 100)
 
         return render(request, 'embedathon/dashboard.html', {
             "team": team,
