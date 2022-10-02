@@ -10,6 +10,10 @@ If running using Docker Containers, use the following command:
 docker-compose --env-file ./embedathon_website/example.env up
 ```
 
+### Common Issues
+
+1. If the `start` script cannot be found, ensure that the `LF` line endings are used (uses `CRLF` in Windows by default).
+
 If building the application from scratch, use the following commands:
 
 ```bash
