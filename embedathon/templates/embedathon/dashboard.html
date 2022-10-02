@@ -28,7 +28,7 @@
                             {% for tabletask, sub in submissions.items %}
                             <tr>
                                 <td>{{ tabletask.id }}</td>
-                                <td><a href="{% url 'task' tabletask.id %}">{{ tabletask.title }}</a></td>
+                                <td><a href="{% url 'task' tabletask.id %}" class="link-primary">{{ tabletask.title }}</a></td>
                                 <td>{{ tabletask.points }}</td>
                                 {% if sub %}
                                 <td>{{ sub.score }}</td>

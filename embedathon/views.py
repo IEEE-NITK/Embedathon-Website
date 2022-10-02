@@ -109,7 +109,7 @@ def team_home(request):
 
     if settings.HACKATHON_START:
         currentTask = team.max_task_visible
-        leaderboard = Team.objects.order_by('-points')
+        leaderboard = Team.objects.order_by('-points')[:5]
         totalPoints = 0
         percentPoints = 0
         submissions = {}
