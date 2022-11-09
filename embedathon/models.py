@@ -24,6 +24,9 @@ class Team(models.Model):
 
     date_created = models.DateTimeField(auto_now_add=True, verbose_name="Date Created")
 
+    def __str__(self):
+        return str(self.teamname)
+
 class Address(models.Model):
     '''
     Stores Address info, only required for certain teams so defining as a separate model
@@ -35,6 +38,9 @@ class Address(models.Model):
     city = models.CharField(max_length=50, verbose_name="City")
     state = models.CharField(max_length=50, verbose_name="State")
     pincode = models.CharField(max_length=6, verbose_name="Pincode")
+
+    class Meta:
+        verbose_name_plural = "Addresses"
 
 class Task(models.Model):
     '''

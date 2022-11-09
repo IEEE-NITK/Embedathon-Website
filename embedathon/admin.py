@@ -1,9 +1,27 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
 
 from .models import *
 
-admin.site.register(User)
-admin.site.register(Team)
-admin.site.register(Address)
-admin.site.register(Task)
+class TeamAdmin(admin.ModelAdmin):
+    list_display = ['teamname', 'passcode', 'leader', 'points', 'max_task_visible', 'disqualified']
+    list_filter = ['teamname', 'max_task_visible', 'disqualified']
+    search_fields = ['teamname', 'passcode']
+    ordering = ['-points']
+
+class AddressAdmin(admin.ModelAdmin):
+    list_display = ['team', 'city', 'state', 'pincode']
+    list_filter = ['team', 'city', 'state']
+    search_fields = ['city', 'state', 'pincode']
+    ordering = ['state']
+
+class TaskAdmin(admin.ModelAdmin):
+    list_display = ['id', 'title', 'points', 'deadline', 'date_created']
+    list_filter = ['title', 'deadline']
+    search_fields = ['title']
+
+admin.site.register(User, UserAdmin)
+admin.site.register(Team, TeamAdmin)
+admin.site.register(Address, AddressAdmin)
+admin.site.register(Task, TaskAdmin)
 admin.site.register(Score)
