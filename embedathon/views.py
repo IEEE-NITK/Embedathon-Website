@@ -92,7 +92,14 @@ def user_profile(request):
     TEMP VIEW.
     '''
     user = request.user
-    return HttpResponse(user.username)
+    try:
+        team = Team.objects.get(Q(leader=user) | Q(member=user))
+    except Team.DoesNotExist:
+        team = None
+    return render(request, 'embedathon/user-profile.html', {
+        'team': team,
+        'color': "#%06x" % random.randint(0xAAAAAA, 0xFFFFFF)
+    })
 
 @login_required
 @user_passes_test(team_check, login_url='/register-team/')

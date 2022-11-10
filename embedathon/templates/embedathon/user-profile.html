@@ -1,0 +1,44 @@
+{% extends 'embedathon/layout.html' %}
+
+{% block title %}{{ user.username }} | Embedathon{% endblock %}
+
+{% block style %}
+<style>
+    .user-image {
+        width: 2em;
+        height: 2em;
+        border-radius: 50%;
+        margin: 0 auto;
+        background-color: {{ color }};
+        align-items: center;
+        justify-content: center;
+        display: flex;
+        font-size: 6em;
+        font-weight: bold;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<section class="section">
+    <div class="row justify-content-center">
+        <div class="col-6">
+            <div class="row text-center">
+                <div class="user-image">
+                    {{ user.username.0 | title }}
+                </div>
+                <h1 class="pt-4">{{ user.username }}</h1>
+                <h3>{{ user.first_name }} {{ user.last_name }}</h3>
+                {% comment %}
+                    Add 3 Cards in a card group:
+                        1. Change email, phone
+                        2. View team details (link to team profile page)
+                        3. Change password
+                    Cards 1 and 3 should have an offcanvas to change the details
+                {% endcomment %}
+            </div>
+
+        </div>
+    </div>
+</section>
+{% endblock %}
