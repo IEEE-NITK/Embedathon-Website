@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.http import HttpResponse, HttpResponseRedirect, Http404, HttpResponseForbidden
 from django.db import IntegrityError
 from django.db.models import Q
 from django.urls import reverse
@@ -14,12 +14,13 @@ import random
 from .models import *
 from .helpers import team_check
 
-# Create your views here.
+
 def index(request):
     '''
     Landing page view. Accepts only GET requests.
     '''
     return render(request, 'embedathon/index.html')
+
 
 def register_user(request):
     '''
@@ -60,6 +61,7 @@ def register_user(request):
 
     return render(request, 'embedathon/register.html')
 
+
 def login_user(request):
     '''
     Login Page view. Accepts GET and POST requests.
@@ -82,24 +84,102 @@ def login_user(request):
 
     return render(request, 'embedathon/login.html')
 
+
 def logout_user(request):
     logout(request)
     return HttpResponseRedirect(reverse('index'))
 
+
 @login_required
 def user_profile(request):
     '''
-    TEMP VIEW.
+    User Profile view. Accepts only GET requests.
     '''
     user = request.user
     try:
         team = Team.objects.get(Q(leader=user) | Q(member=user))
     except Team.DoesNotExist:
         team = None
+
     return render(request, 'embedathon/user-profile.html', {
         'team': team,
         'color': "#%06x" % random.randint(0xAAAAAA, 0xFFFFFF)
     })
+
+
+@login_required
+def update_details(request):
+    '''
+    View to update user details. Accepts only POST requests.
+    '''
+    if request.method == 'POST':
+        user = request.user
+        user.email = request.POST['email']
+        user.phone = request.POST['phone']
+        user.save()
+
+        try:
+            team = Team.objects.get(Q(leader=user) | Q(member=user))
+        except Team.DoesNotExist:
+            team = None
+
+        return render(request, 'embedathon/user-profile.html', {
+            'team': team,
+            'color': "#%06x" % random.randint(0xAAAAAA, 0xFFFFFF),
+            'message': 'Details updated successfully!'
+        })
+
+    # GET requests forbidden
+    return HttpResponseForbidden()
+
+
+@login_required
+def update_password(request):
+    '''
+    View to update user password. Accepts only POST requests.
+    '''
+    if request.method == 'POST':
+        user = request.user
+        password = request.POST['oldPassword']
+
+        # Authenticate the current user with old password
+        auth_user = authenticate(
+            request, username=user.username, password=password)
+
+        try:
+            team = Team.objects.get(Q(leader=user) | Q(member=user))
+        except Team.DoesNotExist:
+            team = None
+
+        # Ensure password matches confirmation
+        new_password = request.POST['newPassword']
+        if new_password != request.POST["confirmPassword"]:
+            return render(request, "embedathon/user-profile.html", {
+                "error": "Passwords must match.",
+                "team": team,
+                'color': "#%06x" % random.randint(0xAAAAAA, 0xFFFFFF)
+            }, status=400)
+
+        # Update password only if previous auth succeeded
+        if auth_user is not None:
+            auth_user.set_password(new_password)
+            auth_user.save()
+        else:
+            return render(request, "embedathon/user-profile.html", {
+                "error": "Old Password is Incorrect.",
+                "team": team,
+                'color': "#%06x" % random.randint(0xAAAAAA, 0xFFFFFF)
+            }, status=400)
+
+        login(request, auth_user)
+        return render(request, 'embedathon/user-profile.html', {
+            'team': team,
+            'color': "#%06x" % random.randint(0xAAAAAA, 0xFFFFFF),
+            'message': 'Password updated successfully!'
+        })
+
+    return HttpResponseForbidden()
+
 
 @login_required
 @user_passes_test(team_check, login_url='/register-team/')
@@ -112,7 +192,8 @@ def team_home(request):
     team = Team.objects.get(Q(leader=user) | Q(member=user))
     tasks = []
     if team.max_task_visible is not None:
-        tasks = Task.objects.filter(id__lte=team.max_task_visible.id).order_by('id')
+        tasks = Task.objects.filter(
+            id__lte=team.max_task_visible.id).order_by('id')
 
     if settings.HACKATHON_START:
         currentTask = team.max_task_visible
@@ -134,13 +215,14 @@ def team_home(request):
             "tasks": tasks,
             "task": currentTask,
             "percent_points": percentPoints,
-            "submissions" : submissions,
+            "submissions": submissions,
             "leaderboard": leaderboard
         })
     return render(request, 'embedathon/homepage.html', {
         "team": team,
         "tasks": tasks
     })
+
 
 @login_required
 @user_passes_test(team_check, login_url='/register-team/')
@@ -149,6 +231,7 @@ def team_profile(request):
     TEMP VIEW.
     '''
     return HttpResponse("Team Profile")
+
 
 @login_required
 @user_passes_test(team_check, login_url='/register-team/')
@@ -163,7 +246,8 @@ def task_view(request, task_id):
     team = Team.objects.get(Q(leader=request.user) | Q(member=request.user))
     tasks = []
     if team.max_task_visible is not None:
-        tasks = Task.objects.filter(id__lte=team.max_task_visible.id).order_by('id')
+        tasks = Task.objects.filter(
+            id__lte=team.max_task_visible.id).order_by('id')
 
     # Render a 404 page if requested task is not visible to the team
     if team.max_task_visible is None or team.max_task_visible.id < task.id:
@@ -171,7 +255,8 @@ def task_view(request, task_id):
     return render(request, "embedathon/task.html", {
         "task": task,
         "tasks": tasks
-        })
+    })
+
 
 @login_required
 def register_team(request):
@@ -190,13 +275,15 @@ def register_team(request):
         isUniquePasscode = False
         passcode = ''
         while not isUniquePasscode:
-            passcode = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
+            passcode = ''.join(random.choices(
+                string.ascii_uppercase + string.digits, k=6))
             if passcode not in list(Team.objects.values_list('passcode', flat=True)):
                 isUniquePasscode = True
 
         # Try to create a team with the given credentials
         try:
-            team = Team.objects.create(teamname=teamname, leader=leader, passcode=passcode)
+            team = Team.objects.create(
+                teamname=teamname, leader=leader, passcode=passcode)
             team.save()
         # If DB encounters an IntegrityError, return webpage with error message
         except IntegrityError:
@@ -207,6 +294,7 @@ def register_team(request):
         return HttpResponseRedirect(reverse('homepage'))
 
     return render(request, 'embedathon/choose-team.html')
+
 
 @login_required
 def join_team(request):
@@ -235,6 +323,7 @@ def join_team(request):
 
     return HttpResponseRedirect(reverse('homepage'))
 
+
 @login_required
 @user_passes_test(team_check, login_url='/register-team/')
 def leave_team(request):
@@ -257,13 +346,13 @@ def leave_team(request):
             return render(request, 'embedathon/leave-team.html', {
                 "team": team,
                 "error": "Invalid passcode!"
-                }, status=400)
+            }, status=400)
         # Check if team is empty
         if newTeam.member != None:
             return render(request, 'embedathon/leave-team.html', {
                 "team": team,
                 "error": "Team is full!"
-                }, status=400)
+            }, status=400)
         # If user is second teammate, just remove them
         if user == team.member:
             team.member = None
@@ -284,7 +373,8 @@ def leave_team(request):
 
     return render(request, 'embedathon/leave-team.html', {
         "team": team
-        })
+    })
+
 
 @staff_member_required
 def update_max_task(request):
@@ -306,13 +396,13 @@ def update_max_task(request):
             return render(request, 'embedathon/update-max-task.html', {
                 'tasks': tasks,
                 'message': 'Successfully updated max task!'
-                })
+            })
         except:
             render(request, 'embedathon/update-max-task.html', {
                 'tasks': tasks,
                 'error': 'Invalid task id!'
-                }, status=400)
+            }, status=400)
 
     return render(request, 'embedathon/update-max-task.html', {
         "tasks": tasks
-        })
+    })
