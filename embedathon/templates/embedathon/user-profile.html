@@ -1,0 +1,125 @@
+{% extends 'embedathon/layout.html' %}
+{% load static %}
+
+{% block title %}{{ user.username }} | Embedathon{% endblock %}
+
+{% block style %}
+<style>
+    .user-image {
+        width: 2em;
+        height: 2em;
+        border-radius: 50%;
+        margin: 0 auto;
+        background-color: {{ color }};
+        align-items: center;
+        justify-content: center;
+        display: flex;
+        font-size: 6em;
+        font-weight: bold;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+{% if message %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert" id="message-alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endif %}
+{% if error %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert" id="message-alert">
+        {{ error }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endif %}
+<section class="section">
+    <div class="row justify-content-center">
+        <div class="col-6">
+            <div class="row text-center">
+                <div class="user-image">
+                    {{ user.username.0 | title }}
+                </div>
+                <h1 class="pt-4">{{ user.username }}</h1>
+                <h3>{{ user.first_name }} {{ user.last_name }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="card-group mt-4">
+        <div class="card m-2">
+            <div class="card-body">
+                <h5 class="card-title">Update Personal Details</h5>
+                <p class="card-text">Update your email address and/or phone number.</p>
+                <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#change-details" aria-controls="change-details"><i class="bi bi-journal-plus"></i>&nbsp;Update Details</button>
+            </div>
+        </div>
+        <div class="card m-2">
+            <div class="card-body">
+                <h5 class="card-title">View Team Details</h5>
+                {% if team %}
+                    <p class="card-text">You're in Team <strong>{{ team.teamname }}</strong>.</p>
+                    <a class="btn btn-primary" href="{% url 'team-profile' %}"><i class="bi bi-people"></i>&nbsp;Visit Team Profile</a>
+                {% else %}
+                    <p class="card-text">You're not on a team yet!</p>
+                    <a class="btn btn-primary" href="{% url 'register-team' %}"><i class="bi bi-people"></i>&nbsp;Create/Join a Team</a>
+                {% endif %}
+            </div>
+        </div>
+        <div class="card m-2">
+            <div class="card-body">
+                <h5 class="card-title">Update Password</h5>
+                <p class="card-text">Update your User Password.</p>
+                <button class="btn btn-primary" data-bs-toggle="offcanvas" data-bs-target="#change-password" aria-controls="change-password"><i class="bi bi-key"></i>&nbsp;Update Password</button>
+            </div>
+        </div>
+    </div>
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="change-details" aria-labelledby="change-details-label">
+        <div class="offcanvas-header">
+            <h3 class="offcanvas-title" id="change-details-label">Change Details</h3>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <form class="needs-validation" action="{% url 'update-details' %}" method="post" onSubmit="return checkDetailsValidity(this)" novalidate>
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email Address</label>
+                    <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}">
+                </div>
+                <div class="mb-3">
+                    <label for="phone" class="form-label">Phone Number</label>
+                    <input type="text" class="form-control" id="phone" name="phone" value="{{ user.phone }}">
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="change-password" aria-labelledby="change-password-label">
+        <div class="offcanvas-header">
+            <h3 class="offcanvas-title" id="change-details-label">Change Password</h3>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <form class="needs-validation" action="{% url 'update-password' %}" method="post" onSubmit="return checkPasswordValidity(this)" novalidate>
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="oldPassword" class="form-label">Old Password</label>
+                    <input type="password" class="form-control" id="oldPassword" name="oldPassword">
+                </div>
+                <div class="mb-3">
+                    <label for="newPassword" class="form-label">New Password</label>
+                    <input type="password" class="form-control" id="newPassword" name="newPassword">
+                </div>
+                <div class="mb-3">
+                    <label for="confirmPassword" class="form-label">Confirm new Password</label>
+                    <input type="password" class="form-control" id="confirmPassword" name="confirmPassword">
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'js/update-details.js' %}"></script>
+{% endblock %}

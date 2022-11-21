@@ -40,12 +40,7 @@
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
 </head>
-
-{% if user.is_authenticated and user_in_team %}
-<body>
-{% else %}
 <body class="toggle-sidebar">
-{% endif %}
   {% block index_only %}
   {% include 'embedathon/header.html' %}
 
