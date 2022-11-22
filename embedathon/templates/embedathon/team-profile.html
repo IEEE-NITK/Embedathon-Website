@@ -43,7 +43,7 @@
                 <span class="col-3 text-end">Joined {{ team.date_created | naturaltime }}</span>
             </div>
             <hr class="mb-2" />
-            <div class="row py-5">
+            <div class="row pt-5 pb-2">
                 <div class="col-4">
                     <div class="card">
                         <h5 class="card-header">Team Leader</h5>
@@ -110,6 +110,11 @@
                     <p>This is your team's passcode. Share it with a second teammate to pair up!</p>
                 </div>
             {% endif %}
+            <div class="row text-center">
+                <div class="col-6 mx-auto">
+                    <a class="btn btn-success rounded-pill" href="{% url 'homepage' %}">Go to Dashboard <i class="bi bi-arrow-right-circle"></i></a>
+                </div>
+            </div>
         </div>
     </section>
     <section class="section">

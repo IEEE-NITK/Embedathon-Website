@@ -92,6 +92,9 @@ class Task(models.Model):
     submission_link = models.URLField(verbose_name="Submission Link")
     date_created = models.DateTimeField(auto_now_add=True, verbose_name="Date Created")
 
+    def __str__(self):
+        return f"{self.id} - {self.title}"
+
 class Score(models.Model):
     '''
     Stores information about scores
@@ -107,3 +110,6 @@ class Score(models.Model):
         super(Score, self).save(*args, **kwargs)
         self.team.points = Score.objects.filter(team=self.team).aggregate(models.Sum('score'))['score__sum']
         self.team.save()
+
+    def __str__(self):
+        return f"{self.task.id} - {self.team.teamname}"

@@ -277,6 +277,9 @@ def update_teamname(request):
     '''
     View to update team name. Accepts only POST requests.
     '''
+    # Not allowed to change team name once hackathon is started
+    if settings.HACKATHON_START:
+        return HttpResponseRedirect(reverse('homepage'))
     if request.method == 'POST':
         team = Team.objects.get(Q(leader=request.user) | Q(member=request.user))
         try:
