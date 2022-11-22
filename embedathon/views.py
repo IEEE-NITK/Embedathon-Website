@@ -370,6 +370,10 @@ def register_team(request):
 
         return HttpResponseRedirect(reverse('homepage'))
 
+    if settings.HACKATHON_START:
+        logout(request)
+        return HttpResponseRedirect(reverse('index'))
+
     return render(request, 'embedathon/choose-team.html')
 
 
