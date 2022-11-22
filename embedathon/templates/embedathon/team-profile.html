@@ -112,7 +112,7 @@
             {% endif %}
             <div class="row text-center">
                 <div class="col-6 mx-auto">
-                    <a class="btn btn-success rounded-pill" href="{% url 'homepage' %}">Go to Dashboard <i class="bi bi-arrow-right-circle"></i></a>
+                    <a class="btn btn-theme rounded-pill" href="{% url 'homepage' %}">Go to Dashboard <i class="bi bi-arrow-right-circle"></i></a>
                 </div>
             </div>
         </div>
@@ -196,7 +196,9 @@
                                        placeholder="Pincode"
                                        maxlength="6"/>
                             </div>
-                            <button type="submit" class="btn btn-primary">Update Address</button>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-theme">Update Address</button>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -227,7 +229,7 @@
                                            id="team_name"
                                            name="team_name"
                                            value="{{ team.teamname }}"/>
-                                    <button type="submit" class="btn btn-primary">Update</button>
+                                    <button type="submit" class="btn btn-theme">Update</button>
                                 </div>
                             </form>
                         </div>
