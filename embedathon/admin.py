@@ -20,8 +20,13 @@ class TaskAdmin(admin.ModelAdmin):
     list_filter = ['title', 'deadline']
     search_fields = ['title']
 
+class ScoreAdmin(admin.ModelAdmin):
+    list_display = ['id', 'team', 'task', 'score']
+    list_filter = ['team', 'task']
+    search_fields = ['team', 'task']
+
 admin.site.register(User, UserAdmin)
 admin.site.register(Team, TeamAdmin)
 admin.site.register(Address, AddressAdmin)
 admin.site.register(Task, TaskAdmin)
-admin.site.register(Score)
+admin.site.register(Score, ScoreAdmin)

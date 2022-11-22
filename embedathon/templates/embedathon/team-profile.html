@@ -1,0 +1,243 @@
+{% extends "embedathon/layout.html" %}
+
+{% load humanize %}
+{% load static %}
+
+{% block title %}
+    {{ team.teamname }} | Embedathon
+{% endblock title %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'css/copy-text.css' %}" />
+{% endblock style %}
+
+{% block body %}
+    {% if message %}
+        <div class="alert alert-success alert-dismissible fade show"
+             role="alert"
+             id="message-alert">
+            {{ message }}
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close"></button>
+        </div>
+    {% endif %}
+    {% if error %}
+        <div class="alert alert-danger alert-dismissible fade show"
+             role="alert"
+             id="message-alert">
+            {{ error }}
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close"></button>
+        </div>
+    {% endif %}
+    <section class="section rounded-3 p-5 {% if team.disqualified %}bg-danger{% else %}bg-light{% endif %}">
+        <div class="container-fluid pb-2">
+            <div class="row align-items-end">
+                <span class="display-5 col-9">Team <strong>{{ team.teamname }}</strong>
+                    {% if team.disqualified %}(Disqualified){% endif %}
+                </span>
+                <span class="col-3 text-end">Joined {{ team.date_created | naturaltime }}</span>
+            </div>
+            <hr class="mb-2" />
+            <div class="row pt-5 pb-2">
+                <div class="col-4">
+                    <div class="card">
+                        <h5 class="card-header">Team Leader</h5>
+                        <div class="card-body">
+                            <h3 class="card-title pb-0">{{ team.leader.first_name }} {{ team.leader.last_name }}</h3>
+                            <div class="d-flex justify-content-between">
+                                <span>
+                                    {% if user == team.leader %}
+                                        <a href="{% url 'user-profile' %}">@{{ team.leader.username }}</a>
+                                    {% else %}
+                                        @{{ team.leader.username }}
+                                    {% endif %}
+                                </span>
+                                <span>
+                                    <a href="mailto:{{ team.leader.email }}" class="text-decoration-none">
+                                        <i class="bi bi-envelope"></i>
+                                    </a>
+                                    &nbsp;
+                                    <a href="tel:+91{{ team.leader.phone }}" class="text-decoration-none">
+                                        <i class="bi bi-telephone"></i>
+                                    </a>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% if team.member %}
+                    <div class="col-4">
+                        <div class="card">
+                            <h5 class="card-header">Team Member</h5>
+                            <div class="card-body">
+                                <h3 class="card-title pb-0">{{ team.member.first_name }} {{ team.member.last_name }}</h3>
+                                <div class="d-flex justify-content-between">
+                                    <span>
+                                        {% if user == team.member %}
+                                            <a href="{% url 'user-profile' %}">@{{ team.member.username }}</a>
+                                        {% else %}
+                                            @{{ team.member.username }}
+                                        {% endif %}
+                                    </span>
+                                    <span>
+                                        <a href="mailto:{{ team.member.email }}" class="text-decoration-none">
+                                            <i class="bi bi-envelope"></i>
+                                        </a>
+                                        &nbsp;
+                                        <a href="tel:+91{{ team.member.phone }}" class="text-decoration-none">
+                                            <i class="bi bi-telephone"></i>
+                                        </a>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+            {% if not team.member %}
+                <div class="row">
+                    <h3>
+                        <a href=""
+                           class="copy-click"
+                           data-tooltip-text="Click To Copy"
+                           data-tooltip-text-copied="✔ Copied">{{ team.passcode }}</a>
+                    </h3>
+                    <p>This is your team's passcode. Share it with a second teammate to pair up!</p>
+                </div>
+            {% endif %}
+            <div class="row text-center">
+                <div class="col-6 mx-auto">
+                    <a class="btn btn-success rounded-pill" href="{% url 'homepage' %}">Go to Dashboard <i class="bi bi-arrow-right-circle"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="section">
+        <div class="accordion" id="accordionUpdateDetails">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#collapseOne"
+                            aria-expanded="false"
+                            aria-controls="collapseOne">
+                        <h4>Update Address</h4>
+                    </button>
+                </h2>
+                <div id="collapseOne"
+                     class="accordion-collapse collapse"
+                     aria-labelledby="headingOne"
+                     data-bs-parent="#accordionUpdateDetails">
+                    <div class="accordion-body">
+                        {% if address %}
+                            <p>Your current address is:</p>
+                        {% else %}
+                            <p>You currently do not have an address saved. Please enter your address below.</p>
+                        {% endif %}
+                        <form action="{% url 'update-address' %}" method="post">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <input type="text"
+                                       required
+                                       class="form-control"
+                                       id="line1"
+                                       name="line1"
+                                       value="{{ address.line1 }}"
+                                       placeholder="Address Line 1"/>
+                            </div>
+                            <div class="input-group mb-3">
+                                <input type="text"
+                                       class="form-control"
+                                       id="line2"
+                                       name="line2"
+                                       value="{{ address.line2 }}"
+                                       placeholder="Address Line 2"/>
+                                <input type="text"
+                                       class="form-control"
+                                       id="line3"
+                                       name="line3"
+                                       value="{{ address.line3 }}"
+                                       placeholder="Address Line 3"/>
+                            </div>
+                            <div class="input-group mb-3">
+                                <input type="text"
+                                       required
+                                       class="form-control"
+                                       id="city"
+                                       name="city"
+                                       value="{{ address.city }}"
+                                       placeholder="City"/>
+                                <select name="state"
+                                        required
+                                        id="state"
+                                        class="form-control"
+                                        aria-label="Default select example">
+                                    {% for state in states %}
+                                        <option value="{{ state.0 }}"
+                                                {% if address.state == state.0 %}selected{% endif %}>
+                                            {{ state.0 }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <input type="text"
+                                       required
+                                       class="form-control"
+                                       id="pincode"
+                                       name="pincode"
+                                       value="{{ address.pincode }}"
+                                       placeholder="Pincode"
+                                       maxlength="6"/>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Update Address</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% if not hackathon_start and user == team.leader %}
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingTwo">
+                        <button class="accordion-button collapsed"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#collapseTwo"
+                                aria-expanded="false"
+                                aria-controls="collapseTwo">
+                            <h4>Change Team Name</h4>
+                        </button>
+                    </h2>
+                    <div id="collapseTwo"
+                         class="accordion-collapse collapse"
+                         aria-labelledby="headingTwo"
+                         data-bs-parent="#accordionUpdateDetails">
+                        <div class="accordion-body">
+                            <form action="{% url 'update-teamname' %}" method="post">
+                                {% csrf_token %}
+                                <div class="input-group mb-3">
+                                    <input type="text"
+                                           required
+                                           class="form-control"
+                                           id="team_name"
+                                           name="team_name"
+                                           value="{{ team.teamname }}"/>
+                                    <button type="submit" class="btn btn-primary">Update</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+{% endblock body %}
+
+{% block script %}
+    <script src="{% static 'js/copy-text.js' %}"></script>
+{% endblock script %}
