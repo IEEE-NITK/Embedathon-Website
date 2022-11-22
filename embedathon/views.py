@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse, HttpResponseRedirect, Http404, HttpResponseForbidden
+from django.http import HttpResponseRedirect, Http404, HttpResponseForbidden
 from django.db import IntegrityError
 from django.db.models import Q
 from django.urls import reverse
@@ -228,9 +228,83 @@ def team_home(request):
 @user_passes_test(team_check, login_url='/register-team/')
 def team_profile(request):
     '''
-    TEMP VIEW.
+    Team Profile view. Accepts only GET requests.
     '''
-    return HttpResponse("Team Profile")
+    team = Team.objects.get(Q(leader=request.user) | Q(member=request.user))
+    try:
+        address = Address.objects.get(team=team)
+    except Address.DoesNotExist:
+        address = None
+    return render(request, 'embedathon/team-profile.html', {
+        "team": team,
+        "address": address,
+        "states": Address.STATE_CHOICES
+    })
+
+@login_required
+@user_passes_test(team_check, login_url='/register-team/')
+def update_address(request):
+    '''
+    View to update team address. Accepts only POST requests.
+    '''
+    if request.method == 'POST':
+        team = Team.objects.get(Q(leader=request.user) | Q(member=request.user))
+        try:
+            address = Address.objects.get(team=team)
+        except Address.DoesNotExist:
+            address = Address(team=team)
+
+        address.line1 = request.POST['line1']
+        address.line2 = request.POST['line2']
+        address.line3 = request.POST['line3']
+        address.city = request.POST['city']
+        address.state = request.POST['state']
+        address.pincode = request.POST['pincode']
+        address.save()
+
+        return render(request, 'embedathon/team-profile.html', {
+            "team": team,
+            "address": address,
+            "states": Address.STATE_CHOICES,
+            "message": "Address updated successfully!"
+        })
+
+    return HttpResponseForbidden()
+
+@login_required
+@user_passes_test(team_check, login_url='/register-team/')
+def update_teamname(request):
+    '''
+    View to update team name. Accepts only POST requests.
+    '''
+    if request.method == 'POST':
+        team = Team.objects.get(Q(leader=request.user) | Q(member=request.user))
+        try:
+            address = Address.objects.get(team=team)
+        except Address.DoesNotExist:
+            address = None
+
+        try:
+            team.teamname = request.POST['team_name']
+            team.save()
+        except IntegrityError:
+            return render(request, 'embedathon/team-profile.html', {
+                "team": team,
+                "address": address,
+                "states": Address.STATE_CHOICES,
+                "error": "Team name already exists!"
+            })
+
+
+
+        return render(request, 'embedathon/team-profile.html', {
+            "team": team,
+            "address": address,
+            "states": Address.STATE_CHOICES,
+            "message": "Team name updated successfully!"
+        })
+
+    return HttpResponseForbidden()
 
 
 @login_required
@@ -352,6 +426,12 @@ def leave_team(request):
             return render(request, 'embedathon/leave-team.html', {
                 "team": team,
                 "error": "Team is full!"
+            }, status=400)
+        # Check if user is trying to join same team
+        if team == newTeam:
+            return render(request, 'embedathon/leave-team.html', {
+                "team": team,
+                "error": "Already in Team!"
             }, status=400)
         # If user is second teammate, just remove them
         if user == team.member:

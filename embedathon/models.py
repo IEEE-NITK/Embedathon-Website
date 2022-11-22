@@ -7,7 +7,7 @@ class User(AbstractUser):
     '''
     User Class, stores info on each candidate
     '''
-    phone = models.CharField(max_length=20, verbose_name="Phone Number")
+    phone = models.CharField(max_length=20, verbose_name="Phone Number", unique=True)
 
 class Team(models.Model):
     '''
@@ -31,12 +31,51 @@ class Address(models.Model):
     '''
     Stores Address info, only required for certain teams so defining as a separate model
     '''
+    STATE_CHOICES = [
+        ('Andhra Pradesh', 'Andhra Pradesh'),
+        ('Andaman and Nicobar Islands', 'Andaman and Nicobar Islands'),
+        ('Arunachal Pradesh', 'Arunachal Pradesh'),
+        ('Assam', 'Assam'),
+        ('Bihar', 'Bihar'),
+        ('Chandigarh', 'Chandigarh'),
+        ('Chhattisgarh', 'Chhattisgarh'),
+        ('Dadra and Nagar Haveli', 'Dadra and Nagar Haveli'),
+        ('Daman and Diu', 'Daman and Diu'),
+        ('Delhi', 'Delhi'),
+        ('Goa', 'Goa'),
+        ('Gujarat', 'Gujarat'),
+        ('Haryana', 'Haryana'),
+        ('Himachal Pradesh', 'Himachal Pradesh'),
+        ('Jammu and Kashmir', 'Jammu and Kashmir'),
+        ('Jharkhand', 'Jharkhand'),
+        ('Karnataka', 'Karnataka'),
+        ('Kerala', 'Kerala'),
+        ('Lakshadweep', 'Lakshadweep'),
+        ('Madhya Pradesh', 'Madhya Pradesh'),
+        ('Maharashtra', 'Maharashtra'),
+        ('Manipur', 'Manipur'),
+        ('Meghalaya', 'Meghalaya'),
+        ('Mizoram', 'Mizoram'),
+        ('Nagaland', 'Nagaland'),
+        ('Odisha', 'Odisha'),
+        ('Puducherry', 'Puducherry'),
+        ('Punjab', 'Punjab'),
+        ('Rajasthan', 'Rajasthan'),
+        ('Sikkim', 'Sikkim'),
+        ('Tamil Nadu', 'Tamil Nadu'),
+        ('Telangana', 'Telangana'),
+        ('Tripura', 'Tripura'),
+        ('Uttar Pradesh', 'Uttar Pradesh'),
+        ('Uttarakhand', 'Uttarakhand'),
+        ('West Bengal', 'West Bengal'),
+    ]
+
     team = models.ForeignKey('Team', on_delete=models.CASCADE, related_name="team_address")
     line1 = models.CharField(max_length=100, verbose_name="Address Line 1")
     line2 = models.CharField(max_length=100, verbose_name="Address Line 2", blank=True)
     line3 = models.CharField(max_length=100, verbose_name="Address Line 3", blank=True)
     city = models.CharField(max_length=50, verbose_name="City")
-    state = models.CharField(max_length=50, verbose_name="State")
+    state = models.CharField(max_length=50, verbose_name="State", choices=STATE_CHOICES)
     pincode = models.CharField(max_length=6, verbose_name="Pincode")
 
     class Meta:
