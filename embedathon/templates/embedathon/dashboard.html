@@ -41,6 +41,10 @@
                                 <td><span class="badge bg-warning text-dark"><i class="bi bi-exclamation-triangle me-1"></i> Not Evaluated</span></td>
                                 {% endif %}
                             </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" class="text-center">No tasks yet!</td>
+                            </tr>
                             {% endfor %}
                         </tbody>
                     </table>
