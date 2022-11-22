@@ -60,7 +60,7 @@
             <div class="card-body">
                 <h5 class="card-title">Update Personal Details</h5>
                 <p class="card-text">Update your email address and/or phone number.</p>
-                <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#change-details" aria-controls="change-details"><i class="bi bi-journal-plus"></i>&nbsp;Update Details</button>
+                <button class="btn btn-theme" type="button" data-bs-toggle="offcanvas" data-bs-target="#change-details" aria-controls="change-details"><i class="bi bi-journal-plus"></i>&nbsp;Update Details</button>
             </div>
         </div>
         <div class="card m-2">
@@ -68,10 +68,10 @@
                 <h5 class="card-title">View Team Details</h5>
                 {% if team %}
                     <p class="card-text">You're in Team <strong>{{ team.teamname }}</strong>.</p>
-                    <a class="btn btn-primary" href="{% url 'team-profile' %}"><i class="bi bi-people"></i>&nbsp;Visit Team Profile</a>
+                    <a class="btn btn-theme" href="{% url 'team-profile' %}"><i class="bi bi-people"></i>&nbsp;Visit Team Profile</a>
                 {% else %}
                     <p class="card-text">You're not on a team yet!</p>
-                    <a class="btn btn-primary" href="{% url 'register-team' %}"><i class="bi bi-people"></i>&nbsp;Create/Join a Team</a>
+                    <a class="btn btn-theme" href="{% url 'register-team' %}"><i class="bi bi-people"></i>&nbsp;Create/Join a Team</a>
                 {% endif %}
             </div>
         </div>
@@ -79,7 +79,7 @@
             <div class="card-body">
                 <h5 class="card-title">Update Password</h5>
                 <p class="card-text">Update your User Password.</p>
-                <button class="btn btn-primary" data-bs-toggle="offcanvas" data-bs-target="#change-password" aria-controls="change-password"><i class="bi bi-key"></i>&nbsp;Update Password</button>
+                <button class="btn btn-theme" data-bs-toggle="offcanvas" data-bs-target="#change-password" aria-controls="change-password"><i class="bi bi-key"></i>&nbsp;Update Password</button>
             </div>
         </div>
     </div>
@@ -99,7 +99,7 @@
                     <label for="phone" class="form-label">Phone Number</label>
                     <input type="text" class="form-control" id="phone" name="phone" value="{{ user.phone }}">
                 </div>
-                <button type="submit" class="btn btn-primary">Update</button>
+                <button type="submit" class="btn btn-theme">Update</button>
             </form>
         </div>
     </div>
@@ -123,7 +123,7 @@
                     <label for="confirmPassword" class="form-label">Confirm new Password</label>
                     <input type="password" class="form-control" id="confirmPassword" name="confirmPassword">
                 </div>
-                <button type="submit" class="btn btn-primary">Update</button>
+                <button type="submit" class="btn btn-theme">Update</button>
             </form>
         </div>
     </div>
