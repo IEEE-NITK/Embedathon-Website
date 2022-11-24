@@ -16,7 +16,7 @@
 
         <!-- Floating Labels Form -->
         <form action="{% url 'register' %}" method="post" class="row g-3 needs-validation"
-            onSubmit="return checkPassword(this)" novalidate>
+            onSubmit="return checkFormValidity(this)" novalidate>
             {% csrf_token %}
             <div class="col-md-6">
                 <div class="form-floating has-validation">

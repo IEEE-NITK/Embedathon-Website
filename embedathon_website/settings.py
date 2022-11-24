@@ -129,6 +129,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = 'https://ieee.nitk.ac.in/embedathon-static-assets/'
+# STATIC_URL = '/static/'
+
+# STATICFILES_DIRS = [
+#     BASE_DIR.parent / "embedathon-static-assets/assets",
+# ]
+
+# STATIC_ROOT = BASE_DIR / "static"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
@@ -136,4 +143,4 @@ STATIC_URL = 'https://ieee.nitk.ac.in/embedathon-static-assets/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # IMPORTANT: Set this value to True when the Hackathon starts
-HACKATHON_START = True
+HACKATHON_START = False
