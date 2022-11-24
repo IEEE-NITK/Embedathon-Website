@@ -19,7 +19,9 @@ def index(request):
     '''
     Landing page view. Accepts only GET requests.
     '''
-    return render(request, 'embedathon/index.html')
+    return render(request, 'embedathon/index.html', {
+        'registeration_start': False
+    })
 
 
 def register_user(request):
@@ -241,6 +243,7 @@ def team_profile(request):
         "states": Address.STATE_CHOICES
     })
 
+
 @login_required
 @user_passes_test(team_check, login_url='/register-team/')
 def update_address(request):
@@ -248,7 +251,8 @@ def update_address(request):
     View to update team address. Accepts only POST requests.
     '''
     if request.method == 'POST':
-        team = Team.objects.get(Q(leader=request.user) | Q(member=request.user))
+        team = Team.objects.get(Q(leader=request.user)
+                                | Q(member=request.user))
         try:
             address = Address.objects.get(team=team)
         except Address.DoesNotExist:
@@ -271,6 +275,7 @@ def update_address(request):
 
     return HttpResponseForbidden()
 
+
 @login_required
 @user_passes_test(team_check, login_url='/register-team/')
 def update_teamname(request):
@@ -281,7 +286,8 @@ def update_teamname(request):
     if settings.HACKATHON_START:
         return HttpResponseRedirect(reverse('homepage'))
     if request.method == 'POST':
-        team = Team.objects.get(Q(leader=request.user) | Q(member=request.user))
+        team = Team.objects.get(Q(leader=request.user)
+                                | Q(member=request.user))
         try:
             address = Address.objects.get(team=team)
         except Address.DoesNotExist:
@@ -297,8 +303,6 @@ def update_teamname(request):
                 "states": Address.STATE_CHOICES,
                 "error": "Team name already exists!"
             })
-
-
 
         return render(request, 'embedathon/team-profile.html', {
             "team": team,

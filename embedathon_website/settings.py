@@ -144,3 +144,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # IMPORTANT: Set this value to True when the Hackathon starts
 HACKATHON_START = False
+REGISTRATION_START = False
