@@ -7,7 +7,7 @@ class User(AbstractUser):
     '''
     User Class, stores info on each candidate
     '''
-    phone = models.CharField(max_length=20, verbose_name="Phone Number", unique=True)
+    phone = models.CharField(max_length=20, verbose_name="Phone Number")
 
 class Team(models.Model):
     '''
