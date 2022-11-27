@@ -16,6 +16,7 @@
                 <div
                     class="text-center col-md-8 d-flex flex-column align-items-center justify-content-center">
                     {% if payment %}
+                        <h2>Payment for Non IEEE and Non NITK Teams</h2>
                         <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=upi%3A%2F%2Fpay%3Fpa%3Danirudhprabhakaran3%40okaxis%26pn%3DAnirudh%20Prabhakaran%26am%3D150.00%26cu%3DINR%26aid%3DuGICAgMDAgPWFIg%26tn%3DEmbedathon%20%7C%20{{ team.teamname | urlencode }}" alt="QR Code" class="img-fluid" />
                         <p class="my-1">Please scan the UPI QR Code or pay <strong>Rs. 150</strong> to the following UPI ID:</p>
                         <a href="upi://pay?pa=anirudhprabhakaran3@okaxis&pn=Anirudh Prabhakaran&am=150.00&cu=INR&aid=uGICAgMDAgPWFIg&tn=Embedathon-{{ team.teamname }}" class="btn btn-theme rounded-pill mb-5"><i class="bi bi-bank"></i> anirudhprabhakaran3@okaxis</a>
