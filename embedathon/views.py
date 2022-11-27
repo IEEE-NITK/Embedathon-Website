@@ -97,7 +97,7 @@ def user_profile(request):
     '''
     user = request.user
     try:
-        team = Team.objects.get(Q(leader=user) | Q(member=user))
+        team = Team.objects.get(Q(leader=user) | Q(member1=user) | Q(member2=user))
     except Team.DoesNotExist:
         team = None
 
@@ -119,7 +119,7 @@ def update_details(request):
         user.save()
 
         try:
-            team = Team.objects.get(Q(leader=user) | Q(member=user))
+            team = Team.objects.get(Q(leader=user) | Q(member1=user) | Q(member2=user))
         except Team.DoesNotExist:
             team = None
 
@@ -147,7 +147,7 @@ def update_password(request):
             request, username=user.username, password=password)
 
         try:
-            team = Team.objects.get(Q(leader=user) | Q(member=user))
+            team = Team.objects.get(Q(leader=user) | Q(member1=user) | Q(member2=user))
         except Team.DoesNotExist:
             team = None
 
@@ -189,7 +189,7 @@ def team_home(request):
     User must be logged in and be a member of a team.
     '''
     user = request.user
-    team = Team.objects.get(Q(leader=user) | Q(member=user))
+    team = Team.objects.get(Q(leader=user) | Q(member1=user) | Q(member2=user))
     tasks = []
     if team.max_task_visible is not None:
         tasks = Task.objects.filter(
@@ -230,7 +230,8 @@ def team_profile(request):
     '''
     Team Profile view. Accepts only GET requests.
     '''
-    team = Team.objects.get(Q(leader=request.user) | Q(member=request.user))
+    user = request.user
+    team = Team.objects.get(Q(leader=user) | Q(member1=user) | Q(member2=user))
     try:
         address = Address.objects.get(team=team)
     except Address.DoesNotExist:
@@ -248,7 +249,8 @@ def update_address(request):
     View to update team address. Accepts only POST requests.
     '''
     if request.method == 'POST':
-        team = Team.objects.get(Q(leader=request.user) | Q(member=request.user))
+        user = request.user
+        team = Team.objects.get(Q(leader=user) | Q(member1=user) | Q(member2=user))
         try:
             address = Address.objects.get(team=team)
         except Address.DoesNotExist:
@@ -281,7 +283,7 @@ def update_teamname(request):
     if settings.HACKATHON_START:
         return HttpResponseRedirect(reverse('homepage'))
     if request.method == 'POST':
-        team = Team.objects.get(Q(leader=request.user) | Q(member=request.user))
+        team = Team.objects.get(Q(leader=request.user) | Q(member1=request.user) | Q(member2=user))
         try:
             address = Address.objects.get(team=team)
         except Address.DoesNotExist:
@@ -320,7 +322,7 @@ def task_view(request, task_id):
     '''
     # Render a 404 page if requested task does not exist
     task = get_object_or_404(Task, pk=task_id)
-    team = Team.objects.get(Q(leader=request.user) | Q(member=request.user))
+    team = Team.objects.get(Q(leader=request.user) | Q(member1=request.user) | Q(member2=request.user))
     tasks = []
     if team.max_task_visible is not None:
         tasks = Task.objects.filter(
@@ -341,7 +343,7 @@ def register_team(request):
     View to register a team. Accepts GET and POST requests.
     '''
     # If user is already part of a team, redirect to homepage
-    if hasattr(request.user, 'team_leader') or hasattr(request.user, 'team_member'):
+    if hasattr(request.user, 'team_leader') or hasattr(request.user, 'team_member_1') or hasattr(request.user, 'team_member_2'):
         return HttpResponseRedirect(reverse('homepage'))
 
     if request.method == 'POST':
@@ -384,7 +386,7 @@ def join_team(request):
     '''
     if request.method == "POST":
         # If user is already part of a team, redirect to homepage
-        if hasattr(request.user, 'team_leader') or hasattr(request.user, 'team_member'):
+        if hasattr(request.user, 'team_leader') or hasattr(request.user, 'team_member_1') or hasattr(request.user, 'team_member_2'):
             return HttpResponseRedirect(reverse('homepage'))
 
         passcode = request.POST['passcode'].upper()
@@ -393,9 +395,13 @@ def join_team(request):
             team = Team.objects.get(passcode=passcode)
 
             # Ensure that team is not already full
-            if team.member is not None:
+            if team.member1 is not None and team.member2 is not None:
                 raise Exception("Team is full")
-            team.member = user
+            
+            if team.member1 is None:
+                team.member1 = user
+            else:
+                team.member2 = user
             team.save()
         except:
             return render(request, 'embedathon/choose-team.html', {
@@ -416,7 +422,7 @@ def leave_team(request):
     if settings.HACKATHON_START:
         return HttpResponseRedirect(reverse('homepage'))
     user = request.user
-    team = Team.objects.get(Q(leader=user) | Q(member=user))
+    team = Team.objects.get(Q(leader=user) | Q(member1=user) | Q(member2=user))
 
     if request.method == "POST":
         passcode = request.POST['passcode'].upper()
@@ -429,7 +435,7 @@ def leave_team(request):
                 "error": "Invalid passcode!"
             }, status=400)
         # Check if team is empty
-        if newTeam.member != None:
+        if newTeam.member1 != None and newTeam.member2 != None:
             return render(request, 'embedathon/leave-team.html', {
                 "team": team,
                 "error": "Team is full!"
@@ -441,19 +447,29 @@ def leave_team(request):
                 "error": "Already in Team!"
             }, status=400)
         # If user is second teammate, just remove them
-        if user == team.member:
-            team.member = None
+        if user == team.member1:
+            team.member1= None
+            team.save()
+        elif user == team.member2:
+            team.member2=None
             team.save()
         # If user is leader and second teammate does not exist, delete the team
-        elif team.member == None:
+        elif team.leader == user and team.member1 is None and team.member2 is None:
             team.delete()
         # User is leader and second teammate exists, promote second teammate to leader
         else:
-            team.leader = team.member
-            team.member = None
+            if team.member1 is not None:
+                team.leader = team.member1
+                team.member1 = None
+            elif team.member2 is not None:
+                team.leader = team.member2
+                team.member2 = None
             team.save()
 
-        newTeam.member = user
+        if newTeam.member1 is None:
+            newTeam.member1 = user
+        elif newTeam.member2 is None:
+            newTeam.member2 = user
         newTeam.save()
 
         return HttpResponseRedirect(reverse('homepage'))

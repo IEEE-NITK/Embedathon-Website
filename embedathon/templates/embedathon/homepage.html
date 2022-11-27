@@ -15,7 +15,7 @@
             <div class="row justify-content-center">
                 <div
                     class="text-center col-md-8 d-flex flex-column align-items-center justify-content-center">
-                    {% if team.member is not None %}
+                    {% if team.member1 is not None and team.member2 is not None %}
                     <h1>You're all set, {{ user.first_name }}!</h1>
                     <h4>You're on Team <strong>{{ team.teamname }}</strong></h4>
                     {% else %}
@@ -23,9 +23,15 @@
                             data-tooltip-text-copied="✔ Copied">{{ team.passcode }}</a>
                     </h1>
                     <h4>Team Passcode for Team <strong>{{ team.teamname }}</strong></h4>
-                    <p class="small">Share this passcode ONLY with your second teammate (if participating as a team of
-                        2)</p>
+                    <p class="small">Share this passcode ONLY with your other teammates (if participating as a team of more than one).</p>
                     {% endif %}
+                    <div class="text-left">
+                        <ul>
+                            <li>Team Leader: {{ team.leader }}</li>
+                            <li>Member 1: {{ team.member1 }}</li>
+                            <li>Member 2: {{ team.member2 }}</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
             <div class="row justify-content-center text-center">

@@ -16,7 +16,8 @@ class Team(models.Model):
     teamname = models.CharField(max_length=30, verbose_name="Team Name", unique=True)
     passcode = models.CharField(max_length=6, verbose_name="Team Passcode", unique=True)
     leader = models.OneToOneField('User', on_delete=models.CASCADE, related_name="team_leader")
-    member = models.OneToOneField('User', on_delete=models.CASCADE, blank=True, null=True, related_name="team_member")
+    member1 = models.OneToOneField('User', on_delete=models.CASCADE, blank=True, null=True, related_name="team_member_1")
+    member2 = models.OneToOneField('User', on_delete=models.CASCADE, blank=True, null=True, related_name="team_member_2")
 
     disqualified = models.BooleanField(default=False, verbose_name="Disqualified")
     points = models.IntegerField(default=0, verbose_name="Points")
