@@ -8,6 +8,9 @@ class User(AbstractUser):
     User Class, stores info on each candidate
     '''
     phone = models.CharField(max_length=20, verbose_name="Phone Number")
+    ieee_number = models.CharField(max_length=10, verbose_name="IEEE Number", blank=True, null=True, default=None)
+    is_nitk = models.BooleanField(default=False, verbose_name="NITK Student")
+    college_name = models.CharField(max_length=100, verbose_name="College Name")
 
 class Team(models.Model):
     '''
