@@ -35,6 +35,9 @@ def register_user(request):
         last_name = request.POST['last_name']
         email = request.POST['email']
         phone = request.POST['phone']
+        is_nitk = request.POST['is_nitk']
+        college = request.POST['college']
+        ieee_number = request.POST['ieee_number']
 
         # Ensure password matches confirmation
         if password != request.POST["confirmation"]:
@@ -48,6 +51,12 @@ def register_user(request):
             user.first_name = first_name
             user.last_name = last_name
             user.phone = phone
+            user.is_nitk = is_nitk
+            user.college_name = college
+            if ieee_number == '':
+                user.ieee_number = None
+            else:
+                user.ieee_number = ieee_number
             user.save()
         # If DB encounters an IntegrityError, return webpage with error message
         except IntegrityError:
@@ -218,9 +227,15 @@ def team_home(request):
             "submissions": submissions,
             "leaderboard": leaderboard
         })
+
+    teamIsNITK = team.leader.is_nitk or (team.member is not None and team.member.is_nitk)
+    teamIsIEEE = team.leader.ieee_number is not None or (team.member is not None and team.member.ieee_number is not None)
+    paymentRequired = not teamIsNITK and not teamIsIEEE
+
     return render(request, 'embedathon/homepage.html', {
         "team": team,
-        "tasks": tasks
+        "tasks": tasks,
+        "payment": paymentRequired,
     })
 
 
