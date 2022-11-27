@@ -35,7 +35,7 @@ def register_user(request):
         last_name = request.POST['last_name']
         email = request.POST['email']
         phone = request.POST['phone']
-        is_nitk = request.POST['is_nitk']
+        is_nitk = request.POST.get('is_nitk', 'off') == 'on'
         college = request.POST['college']
         ieee_number = request.POST['ieee_number']
 
