@@ -20,7 +20,7 @@ def index(request):
     Landing page view. Accepts only GET requests.
     '''
     return render(request, 'embedathon/index.html', {
-        'registeration_start': False
+        'registration_start': settings.REGISTRATION_START
     })
 
 
@@ -28,6 +28,10 @@ def register_user(request):
     '''
     View to register a single user. Accepts GET and POST requests.
     '''
+    # Not allowed to register before registration starts
+    if not settings.REGISTRATION_START:
+        return HttpResponseRedirect(reverse('index'))
+
     if request.user.is_authenticated:
         return HttpResponseRedirect(reverse('homepage'))
     if request.method == 'POST':
@@ -68,6 +72,10 @@ def login_user(request):
     '''
     Login Page view. Accepts GET and POST requests.
     '''
+    # Not allowed to login before registration starts
+    if not settings.REGISTRATION_START:
+        return HttpResponseRedirect(reverse('index'))
+
     if request.user.is_authenticated:
         return HttpResponseRedirect(reverse('homepage'))
     if request.method == 'POST':
