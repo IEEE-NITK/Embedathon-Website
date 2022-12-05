@@ -8,7 +8,6 @@
       {% else %}
       <a href="{% url 'index' %}" class="logo d-flex align-items-center">
       {% endif %}
-        <!-- TODO: Update with Embedathon Logo -->
         <img src="{% static 'img/logo.png' %}" alt="Embedathon Logo">
         <span class="d-none d-lg-block">Embedathon</span>
       </a>
@@ -34,7 +33,6 @@
         </li>End Search Icon -->
 
         {% if user.is_authenticated %}
-        <!-- TODO: Update all necessary data with User details -->
         <li class="nav-item dropdown pe-3">
 
           <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
