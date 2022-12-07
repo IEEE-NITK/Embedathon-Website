@@ -25,7 +25,11 @@ class ScoreAdmin(admin.ModelAdmin):
     list_filter = ['team', 'task']
     search_fields = ['team', 'task']
 
-admin.site.register(User, UserAdmin)
+class MyUserAdmin(UserAdmin):
+    list_display = ("username", "email", "first_name", "last_name", "phone", "college_name", "ieee_number", "is_staff")
+    list_filter = ("is_staff", "is_nitk", "is_active", "groups")
+
+admin.site.register(User, MyUserAdmin)
 admin.site.register(Team, TeamAdmin)
 admin.site.register(Address, AddressAdmin)
 admin.site.register(Task, TaskAdmin)
