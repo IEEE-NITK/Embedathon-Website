@@ -1,0 +1,41 @@
+{% extends 'embedathon/layout.html' %}
+
+{% block title %}Verify | Embedathon{% endblock %}
+
+{% block body %}
+<div class="container">
+    <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
+        <div class="container row justify-content-center col-lg-6 col-md-6 d-flex flex-column align-items-center">
+            <div class="card mb-3">
+
+                <div class="card-body">
+                    {% if error %}
+                    <div class="alert alert-danger alert-dismissible fade show mt-3 mb-0" role="alert">
+                        {{ error }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endif %}
+
+                    <div class="py-2">
+                        <h5 class="card-title text-center pb-0 fs-4">Verify your {% if is_nitk %}College {% endif %}Email Address</h5>
+                        <p class="text-center small">Enter your {% if is_nitk %}<strong>NITK EDU</strong> {% endif %}Email Address</p>
+                    </div>
+
+                    <form action="{% url 'verify' %}" method="post" class="row g-3 needs-validation" novalidate>
+                        {% csrf_token %}
+                        <div class="col-12">
+                            <div class="input-group has-validation">
+                                <input type="email" name="email" class="form-control" id="yourEmail" value="{{ email }}" {% if is_nitk %}pattern="[A-Za-z0-9._%+-]+@nitk\.edu\.in" title="NITK EDU Email Address (ends with @nitk.edu.in)"{% endif %}required autofocus>
+                                <div class="invalid-feedback">Please enter your email address correctly.</div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <button class="btn btn-primary w-100" type="submit">Send Verification Email</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}

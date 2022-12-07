@@ -11,6 +11,7 @@ class User(AbstractUser):
     ieee_number = models.CharField(max_length=10, verbose_name="IEEE Number", blank=True, null=True, default=None)
     is_nitk = models.BooleanField(default=False, verbose_name="NITK Student")
     college_name = models.CharField(max_length=100, verbose_name="College Name")
+    is_verified = models.BooleanField(default=False, verbose_name="Verified")
 
 class Team(models.Model):
     '''

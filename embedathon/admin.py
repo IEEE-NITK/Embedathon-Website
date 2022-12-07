@@ -26,8 +26,13 @@ class ScoreAdmin(admin.ModelAdmin):
     search_fields = ['team', 'task']
 
 class MyUserAdmin(UserAdmin):
-    list_display = ("username", "email", "first_name", "last_name", "phone", "college_name", "ieee_number", "is_staff")
+    list_display = ("username", "email", "first_name", "last_name", "phone", "college_name", "ieee_number", "is_verified")
     list_filter = ("is_staff", "is_nitk", "is_active", "groups")
+    fieldsets = (
+        (None, {"fields": ("username", "password")}),
+        (("Personal info"), {"fields": ("first_name", "last_name", "email", "phone", "college_name", "ieee_number", "is_nitk", "is_verified")}),
+        (("Important dates"), {"fields": ("last_login", "date_joined")}),
+    )
 
 admin.site.register(User, MyUserAdmin)
 admin.site.register(Team, TeamAdmin)

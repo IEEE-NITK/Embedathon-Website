@@ -7,12 +7,16 @@ from django.conf import settings
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.sites.shortcuts import get_current_site
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
 
 import string
 import random
 
 from .models import *
 from .helpers import team_check
+
+tokenGen = PasswordResetTokenGenerator()
 
 
 def index(request):
@@ -103,6 +107,21 @@ def login_user(request):
 
     return render(request, 'embedathon/login.html')
 
+@login_required
+def verify_user(request):
+    if request.method == "POST":
+        user = request.user
+        user.email = request.POST['email']
+        user.save()
+        token = tokenGen.make_token(user)
+        # TODO: Send email with token
+
+    return render(request, 'embedathon/verify-user.html', {
+        "is_nitk": request.user.is_nitk,
+        "email": request.user.email,
+    })
+
+# TODO: Make view that takes in token and verifies user
 
 def logout_user(request):
     logout(request)
