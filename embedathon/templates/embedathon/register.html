@@ -70,6 +70,7 @@
                     </div>
                 </div>
             </div>
+        
             <div class="col-md-8">
                 <div class="input-group">
                     <span class="input-group-text">From NITK?</span>
@@ -86,6 +87,7 @@
                     <label for="ieee_number">IEEE Membership Number (optional)</label>
                 </div>
             </div>
+            <div id="collegeAndMail"></div>
             <div class="text-center">
                 <button type="submit" class="btn btn-primary">Register</button>
             </div>
@@ -100,5 +102,86 @@
 {% endblock %}
 
 {% block script %}
-<script src="{% static 'js/register.js' %}"></script>
+<!--<script src="{% static 'js/register.js' %}"</script>></script> -->
+<script>
+    function checkFormValidity(form) {
+    password = form.password.value;
+    confirmation = form.confirmation.value;
+    phone = form.phone.value.toString();
+
+   if (phone.toString().length < 10) {
+        form.phone.setCustomValidity("Phone number must be 10 digits");
+        return false;
+    }
+    form.phone.setCustomValidity('');
+
+    if (password != confirmation || password == '' || confirmation == '') {
+        form.password.setCustomValidity("Passwords don't match");
+        form.confirmation.setCustomValidity("Passwords don't match");
+        return false;
+    }
+    form.password.setCustomValidity('');
+    form.confirmation.setCustomValidity('');
+
+//
+    if(document.getElementById("is_nitk").checked){
+   let mail = document.getElementById("mail").value; 
+   let  nitkRegex = /^[A-Za-z0-9._%+-]+@nitk\.edu\.in$/;
+   if(!nitkRegex.test(mail)){
+     form.mail.setCustomValidity("Invalid email id");
+     return false;
+    }
+    form.mail.setCustomValidity('');
+   }
+
+    return true;
+}
+
+let currentCollege = "";
+
+function NITKToggle(checkbox) {
+    const college = document.getElementById('college');
+    if (checkbox.checked) {
+        currentCollege = college.value;
+        college.value = 'NITK, Surathkal';
+        college.readOnly = true;
+
+        // Creating input field
+        let mailIp = document.createElement("input");
+        mailIp.name="mail";
+        mailIp.id = "mail";
+        mailIp.type ="text";
+        mailIp.className="form-control";
+        mailIp.placeholder = "NITK EMAIL ID";
+        mailIp.setAttribute("required","");
+        //
+        // Creating label
+        let mailLabel = document.createElement("label");
+        mailLabel.htmlFor = "mail";
+        mailLabel.innerText = "NITK EMAIL ID"
+        //
+        // Creating div "form-floating has-validation"
+        let divInner = document.createElement("div");
+        divInner.className = "form-floating has-validation";
+        //
+        // Appending the input field and label into divInner
+        divInner.appendChild(mailIp);
+        divInner.appendChild(mailLabel);
+        //
+        //Creating divOuter & appending divInner to it
+        let divOuter = document.createElement("div");
+        divOuter.className = "col-md-6";
+        divOuter.appendChild(divInner);
+        //
+        // Appending to collegeAndMail div
+        document.getElementById("collegeAndMail").appendChild(divOuter);
+
+
+    } else {
+        college.value = currentCollege;
+        college.readOnly = false;
+    }
+
+}
+</script>
 {% endblock %}
