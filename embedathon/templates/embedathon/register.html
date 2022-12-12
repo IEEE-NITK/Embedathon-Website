@@ -39,7 +39,7 @@
                         required>
                     <label for="email">Email Address</label>
                     <div class="invalid-feedback" id="emailError">
-                        Provide your NITK EMAIL ID !
+                        Provide a valid Email ID!
                     </div>
                 </div>
             </div>
@@ -73,7 +73,7 @@
                     </div>
                 </div>
             </div>
-        
+
             <div class="col-md-8">
                 <div class="input-group">
                     <span class="input-group-text">From NITK?</span>
@@ -126,19 +126,18 @@
     form.password.setCustomValidity('');
     form.confirmation.setCustomValidity('');
 
-//  
     if(document.getElementById("is_nitk").checked){
-        let  nitkRegex = /^[A-Za-z0-9._%+-]+@nitk\.edu\.in$/;
+        let nitkRegex = /^[A-Za-z0-9._%+-]+@nitk\.edu\.in$/;
         if(!nitkRegex.test(email)){
-            document.getElementById("emailError").textContent = "Provide a valid NITK EMAIL ID !";
+            document.getElementById("emailError").textContent = "Provide a valid NITK EDU Email ID!";
             form.email.setCustomValidity("Not a NITK EMAIL ID");
             return false;
         }
     }
-    else{
+    else {
         let mailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
         if(!mailRegex.test(email)){
-            document.getElementById("emailError").textContent = "Provide a valid email id";
+            document.getElementById("emailError").textContent = "Provide a valid Email ID!";
             form.email.setCustomValidity("Not a valid email id");
             return false;
         }
