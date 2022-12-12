@@ -2,3 +2,4 @@ Django==4.0
 django-environ==0.8.1
 mysqlclient==2.1.0
 sqlparse==0.4.2
+django-import-export==3.0.1
