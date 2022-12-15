@@ -1,4 +1,4 @@
-Django==4.0
+Django==4.0.8
 django-environ==0.8.1
 mysqlclient==2.1.0
 sqlparse==0.4.2
