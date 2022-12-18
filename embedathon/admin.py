@@ -11,7 +11,7 @@ class TeamResource(resources.ModelResource):
         exclude = ('passcode', 'date_created')
 
 class TeamAdmin(ExportMixin, admin.ModelAdmin):
-    list_display = ['teamname', 'passcode', 'leader', 'points', 'max_task_visible', 'disqualified']
+    list_display = ['teamname', 'passcode', 'leader', 'member', 'points', 'max_task_visible', 'disqualified']
     list_filter = ['teamname', 'max_task_visible', 'disqualified']
     search_fields = ['teamname', 'passcode']
     ordering = ['-points']
