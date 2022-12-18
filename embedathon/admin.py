@@ -1,7 +1,8 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from import_export import resources
+from import_export import resources, fields
 from import_export.admin import ExportMixin
+from import_export.widgets import ForeignKeyWidget
 
 from .models import *
 
@@ -49,9 +50,20 @@ class ScoreAdmin(ExportMixin, admin.ModelAdmin):
     resource_classes = (ScoreResource,)
 
 class UserResource(resources.ModelResource):
+    team_leader = fields.Field(
+        column_name='team_leader',
+        attribute='team_leader',
+        widget=ForeignKeyWidget(Team, 'teamname')
+    )
+
+    team_member = fields.Field(
+        column_name='team_member',
+        attribute='team_member',
+        widget=ForeignKeyWidget(Team, 'teamname')
+    )
     class Meta:
         model = User
-        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'is_staff', 'phone', 'ieee_number', 'college_name')
+        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'is_staff', 'phone', 'ieee_number', 'college_name', 'team_leader', 'team_member')
 
 class MyUserAdmin(ExportMixin, UserAdmin):
     list_display = ("username", "email", "first_name", "last_name", "phone", "college_name", "ieee_number", "is_staff")
