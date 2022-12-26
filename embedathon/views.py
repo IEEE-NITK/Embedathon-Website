@@ -81,10 +81,6 @@ def login_user(request):
     '''
     Login Page view. Accepts GET and POST requests.
     '''
-    # Not allowed to login before registration starts
-    if not settings.REGISTRATION_START:
-        return HttpResponseRedirect(reverse('index'))
-
     if request.user.is_authenticated:
         return HttpResponseRedirect(reverse('homepage'))
     if request.method == 'POST':
