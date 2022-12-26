@@ -65,10 +65,14 @@ class UserResource(resources.ModelResource):
         model = User
         fields = ('id', 'username', 'first_name', 'last_name', 'email', 'is_staff', 'phone', 'ieee_number', 'college_name', 'team_leader', 'team_member')
 
-class MyUserAdmin(ExportMixin, UserAdmin):
-    list_display = ("username", "email", "first_name", "last_name", "phone", "college_name", "ieee_number", "is_staff")
+class MyUserAdmin(UserAdmin):
+    list_display = ("username", "email", "first_name", "last_name", "phone", "college_name", "ieee_number")
     list_filter = ("is_staff", "is_nitk", "is_active", "groups")
-    resource_classes = (UserResource,)
+    fieldsets = (
+        (None, {"fields": ("username", "password")}),
+        (("Personal info"), {"fields": ("first_name", "last_name", "email", "phone", "college_name", "ieee_number", "is_nitk")}),
+        (("Important dates"), {"fields": ("last_login", "date_joined")}),
+    )
 
 admin.site.register(User, MyUserAdmin)
 admin.site.register(Team, TeamAdmin)
